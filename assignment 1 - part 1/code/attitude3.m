@@ -52,7 +52,7 @@ q = euler2q(phi,theta,psi);   % transform initial Euler angles to q
 w = [0 0 0]';                 % initial angular rates
 
 table = zeros(N+1,14);        % memory allocation
-tracking_error = zeros(N+1,3);        % memory allocation
+desired_euler_angles = zeros(N+1,3);        % memory allocation
 
 % reference value for system
 
@@ -60,18 +60,26 @@ tracking_error = zeros(N+1,3);        % memory allocation
 
 %% FOR-END LOOP
 for i = 1:N+1,
-   t = (i-1)*h;                  % time      
-   
+   t = (i-1)*h;                  % time
+     
    phi_d =10*sin(0.1*t)*deg2rad;
    theta_d = 0*deg2rad;
    psi_d = 15*cos(0.05*t)*deg2rad;
    q_d = euler2q(phi_d,theta_d,psi_d);  
    
-   q_d_conj = quatconj(q_d');
-   q_tilde = quatmultiply(q', q_d_conj); % crossproduct between multipy
+   q_tilde = quatmultiply(q', quatconj(q_d')); % crossproduct between multipy
    q_tilde = q_tilde'; % MATLAB has transformed quatornians compared to book
    
-   u = -K*[q_tilde(2:end)' w']'; 
+   [J, R ,T] = eulerang(phi_d,theta_d,psi_d);
+          
+   phi_d_dot = cos(0.1*t)*deg2rad;
+   theta_d_dot = 0*deg2rad;
+   psi_d_dot = -0.75*sin(0.05*t)*deg2rad;
+   
+   w_d = inv(T) * [phi_d_dot theta_d_dot psi_d_dot]';
+   w_tilde = w - w_d;
+   
+   u = -K*[q_tilde(2:end)' w_tilde']'; 
    tau = u(4:end);     % u is for 6 states, tau is for 3 states
 
    [phi,theta,psi] = q2euler(q); % transform q to Euler angles
@@ -81,8 +89,8 @@ for i = 1:N+1,
    w_dot = I_inv*(Smtrx(I*w)*w + tau);  % rigid-body kinetics
    
    table(i,:) = [t q' phi theta psi w' tau'];  % store data in table
-   table_desired(i,:) = [phi_d theta_d psi_d];  % store data in table
-   tracking_error(i,:)  = [phi-phi_d, theta-theta_d, psi - psi_d];
+   desired_euler_angles(i,:) = [phi_d theta_d psi_d];  % store data in table
+   
    
    q = q + h*q_dot;	             % Euler integration
    w = w + h*w_dot;
@@ -99,18 +107,21 @@ theta   = rad2deg*table(:,7);
 psi     = rad2deg*table(:,8);
 w       = rad2deg*table(:,9:11);  
 tau     = table(:,12:14);
-phi_d   = rad2deg*tracking_error(:,1);
-theta_d = rad2deg*tracking_error(:,2);
-psi_d   = rad2deg*tracking_error(:,3);
+phi_d   = rad2deg*( desired_euler_angles(:,1));
+theta_d = rad2deg*( desired_euler_angles(:,2));
+psi_d   = rad2deg*( desired_euler_angles(:,3));
+phi_error   = rad2deg*( desired_euler_angles(:,1) - phi);
+theta_error = rad2deg*( desired_euler_angles(:,2) - theta);
+psi_error   = rad2deg*( desired_euler_angles(:,3) - psi);
 
 clf
-figure(gcf)
-subplot(511),plot(t,phi),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
-subplot(512),plot(t,theta),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
-subplot(513),plot(t,psi),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
+figure(1)
+subplot(511),plot(t,phi),hold on, plot(t,phi_d),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
+subplot(512),plot(t,theta),hold on,plot(t,theta_d),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
+subplot(513),plot(t,psi),hold on, plot(t,psi_d),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
 subplot(514),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid
 subplot(515),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid
 figure(2)
-subplot(311),plot(t,phi_d),xlabel('time (s)'),ylabel('deg'),title('\phi tracking error '),grid
-subplot(312),plot(t,theta_d),xlabel('time (s)'),ylabel('deg'),title('\theta tracking error '),grid
-subplot(313),plot(t,psi_d),xlabel('time (s)'),ylabel('deg'),title('\psi tracking error'),grid
+subplot(311),plot(t,phi_error),xlabel('time (s)'),ylabel('deg'),title('\phi tracking error '),grid
+subplot(312),plot(t,theta_error),xlabel('time (s)'),ylabel('deg'),title('\theta tracking error '),grid
+subplot(313),plot(t,psi_error),xlabel('time (s)'),ylabel('deg'),title('\psi tracking error'),grid
