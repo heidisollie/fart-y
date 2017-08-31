@@ -1,19 +1,37 @@
 \section*{Problem 1 - Attitude Control of Satellite}
 
-The objective of problem 1 is to control attitude of a Satellite. The satellites equations of motions are represented in \eqref{eq:dynamics} \cite{Fossen2011}. The parameters for this specific Satellite are; $\mathbf{I}_{CG} = mr^2$, $m = 100 kg$, $r = 2.0 m$. 
+The objective of problem 1 is to control attitude of a Satellite. The satellites equations of motions are represented in equation \eqref{eq:dynamics}, equation ?? \todo{find number in fossen} \cite{Fossen2011}. The parameters for this specific Satellite are; $\mathbf{I}_{CG} = mr^2$, $m = 100 kg$, $r = 2.0 m$. 
 
-\begin{equation}
+\begin{subequations}
 \label{eq:dynamics}
-	\begin{aligned}
+	\begin{align}
 		\dot{\mathbf{q}} = \mathbf{T}_q (\mathbf{q} ) \boldsymbol{\omega} \\
-		\mathbf{I}_{CG} \dot{\boldsymbol{\omega}} - \mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} & =  \boldsymbol{\tau}
-	\end{aligned}	
-\end{equation}
+		\mathbf{I}_{CG} \dot{\boldsymbol{\omega}} - \mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} & =  \boldsymbol{\tau} \label{eq:omega_dot}
+	\end{align}	
+\end{subequations}
 
 
 \todo{Should we write introduction ?}
 
-\subsection*{Problem 1.1} 
+\subsection*{Problem 1.1: Finding the equilibrium point} 
+
+The equilibrium point is defined as the steady-state solution of a system, meaning $\dot{\mathbf{x}} = 0$ with $\mathbf{x}$ being the state of the system.
+
+
+The equilibrium point $\mathbf{x_0}$ of the closed-loop system $\mathbf{x} = [ \boldsymbol{\epsilon}^T, \boldsymbol{\omega}^T]^T$ corresponding to $\mathbf{q} = [\eta,\epsilon_1, \epsilon_2, \epsilon_3]^T$ and $\boldsymbol{\tau} = \boldsymbol{0}$ may be found by setting $\boldsymbol{\epsilon} = \mathbf{0}$ and $\dot{\boldsymbol{\omega}} = \mathbf{0}$. The equation for $\boldsymbol{\epsilon}$ and $\boldsymbol{\omega}$ may be found by using equation (2.86) in \cite{Fossen2011} and \eqref{eq:omega_dot}. From equation (2.86) in \cite{Fossen2011} and \eqref{eq:omega_dot} the following equations was found:
+
+
+\begin{subequations}
+\label{eq:dynamics}
+	\begin{align}
+		\dot{\boldsymbol{\epsilon}} =  (\eta \mathbf{I}_{3X3} + \mathbf{S}(\boldsymbol{\epsilon}) ) \boldsymbol{\omega} \\
+		 \dot{\boldsymbol{\omega}} = \mathbf{I}_{CG}^{-1} (\mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} +  \boldsymbol{\tau})
+	\end{align}	
+\end{subequations}
+
+
+
+
 
 
 
