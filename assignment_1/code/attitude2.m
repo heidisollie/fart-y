@@ -81,8 +81,7 @@ for i = 1:N+1,
    w_dot = I_inv*(Smtrx(I*w)*w + tau);  % rigid-body kinetics
    
    table(i,:) = [t q' phi theta psi w' tau'];  % store data in table
-   table_desired(i,:) = [phi_d theta_d psi_d];  % store data in table
-   tracking_error(i,:)  = [phi-phi_d, theta-theta_d, psi - psi_d];
+   desired_euler_angles(i,:) = [phi_d theta_d psi_d];  % store data in table
    
    q = q + h*q_dot;	             % Euler integration
    w = w + h*w_dot;
@@ -99,18 +98,22 @@ theta   = rad2deg*table(:,7);
 psi     = rad2deg*table(:,8);
 w       = rad2deg*table(:,9:11);  
 tau     = table(:,12:14);
-phi_d   = rad2deg*tracking_error(:,1);
-theta_d = rad2deg*tracking_error(:,2);
-psi_d   = rad2deg*tracking_error(:,3);
+phi_d   = rad2deg*( desired_euler_angles(:,1));
+theta_d = rad2deg*( desired_euler_angles(:,2));
+psi_d   = rad2deg*( desired_euler_angles(:,3));
+phi_error   = phi -  phi_d ;    % error = tracking_error
+theta_error = theta - theta_d;
+psi_error   = psi - psi_d ;
 
 clf
-figure(gcf)
-subplot(511),plot(t,phi),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
-subplot(512),plot(t,theta),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
-subplot(513),plot(t,psi),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
-subplot(514),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid
-subplot(515),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid
+figure(1)
+subplot(411),plot(t,phi),hold on, plot(t,phi_d),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid, legend('\phi', '\phi_d')
+subplot(412),plot(t,theta),hold on,plot(t,theta_d),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid, legend('\theta', '\theta_d')
+subplot(413),plot(t,psi),hold on, plot(t,psi_d),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid, legend('\psi', '\psi_d')
+subplot(414),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid,legend('w_1', 'w_2', 'w_3')
+
 figure(2)
-subplot(311),plot(t,phi_d),xlabel('time (s)'),ylabel('deg'),title('\phi tracking error '),grid
-subplot(312),plot(t,theta_d),xlabel('time (s)'),ylabel('deg'),title('\theta tracking error '),grid
-subplot(313),plot(t,psi_d),xlabel('time (s)'),ylabel('deg'),title('\psi tracking error'),grid
+subplot(411),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid, legend('\tau_1', '\tau_2', '\tau_3')
+subplot(412),plot(t,phi_error),xlabel('time (s)'),ylabel('deg'),title('tracking error \phi'),grid
+subplot(413),plot(t,theta_error),xlabel('time (s)'),ylabel('deg'),title('\theta tracking error \theta '),grid
+subplot(414),plot(t,psi_error),xlabel('time (s)'),ylabel('deg'),title('\psi tracking error \psi'),grid

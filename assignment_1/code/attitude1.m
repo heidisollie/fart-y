@@ -83,9 +83,10 @@ w       = rad2deg*table(:,9:11);
 tau     = table(:,12:14);
 
 clf
-figure(gcf)
-subplot(511),plot(t,phi),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
-subplot(512),plot(t,theta),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
-subplot(513),plot(t,psi),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
-subplot(514),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid
-subplot(515),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid
+figure(1)
+subplot(411),plot(t,phi),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
+subplot(412),plot(t,theta),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
+subplot(413),plot(t,psi),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
+subplot(414),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid, legend('w_1', 'w_2', 'w_3')
+figure(2)
+subplot(111),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid, legend('\tau_1', '\tau_2', '\tau_3')
