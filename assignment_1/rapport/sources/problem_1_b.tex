@@ -47,7 +47,7 @@ We used the MATLAB function \texttt{eulerang()} to get the $\mathbf{T}_{\Theta_d
 
 \subsubsection*{Simulation results}
 
-We can see from \Cref{fig:sim_attitude3_euler} and \Cref{fig:sim_attitude3_omega} that the satellite is now able to follow the given reference signal in both angles and angle velocities. From \Cref{fig:sim_attitude3_track} we can see that though there still is an error in the $\phi$ and $\psi$ they are much smaller than previously. Now that $\omega$ and $\epsilon$ have corresponding desired values, they can both be satisfied by the same actions. The cooperation between the two parts of the state, which are in themselves related, is key to making a good controller. The linearization error discussed in the previous problem may still endure and the controller is not exactly the fastest in the galaxy, but all in all the satellite control is much better than before.
+We can see from \Cref{fig:sim_attitude3_euler} and \Cref{fig:sim_attitude3_omega} that the satellite is now able to follow the given reference signal for both angles and angle velocities. From \Cref{fig:sim_attitude3_track} we can see that though there still is an error in the $\phi$ and $\psi$ they are much smaller than previously. Now that $\omega$ and $\epsilon$ have corresponding desired values, they can both be satisfied by the same actions. The cooperation between the two parts of the state, which are in themselves related, is key to making a good controller. The linearization error discussed in the previous problem may still endure and the controller is not exactly the fastest in the galaxy, but all in all the satellite control is much better than before.
 
 \begin{figure}
 	\centering
@@ -80,7 +80,53 @@ is positive and radially unbounded.
 
 The reason for its positivity is that $\mathbf{I}_{CG}$ being an identity matrix with a positive number, $mr^2$, on its diagonal, is positive definite. So the first part of V is positive (labeling 0 as a positive number). The second part, consisting of $2 k_p (1-\tilde{\eta})$, may only be negative if $\tilde{\eta} > 1$. This will never happen however, as $\tilde{\eta}$ is part of the unit quaternion $\tilde{q}$ making $|\tilde{\eta}| \leq 1$. Thus the second part of V will also be positive. The Lyapunov function is usually thought of as a representation of the energy in the system so the fact that it is never negative makes sense. 
 
-The function is radially unbounded because as $\tilde{\omega}\rightarrow \infty$ the first part of V, $\frac{1}{2} \tilde{\boldsymbol{\omega}}^{\top} \mathbf{I}_{CG}\tilde{\boldsymbol{\omega}} \rightarrow \infty$
+The function is radially unbounded because as $\tilde{\omega}\rightarrow \infty$ the first part of V does the same, $\frac{1}{2} \tilde{\boldsymbol{\omega}}^{\top} \mathbf{I}_{CG}\tilde{\boldsymbol{\omega}} \rightarrow \infty$. We already established that the second part of V, $2 k_p (1-\tilde{\eta})$ is positive, meaning that V as a whole is unbounded.
+
+To calculate $\dot{V}$ $\tilde{\omega} = \omega - \omega_d = \omega$ was substituded into V before differentiating:
+
+\begin{equation}
+    \dot{V} = \omega^\top\mathbf{I}_{CG}\dot{\omega} + k_p\tilde{\epsilon}^\top\omega 
+\end{equation}
+
+Then, using \eqref{eq:EOM_omega_dot}, $\mathbf{I}_{CG}\dot{\omega}$ was substituted:
+
+\begin{equation}
+    \dot{V} = \omega^\top(\tau - \mathbf{S}(\mathbf{I}_{CG})\omega) + k_p\tilde{\epsilon}^\top\omega 
+\end{equation}
+
+Knowing $\omega\mathbf{S}(\mathbf{I}_{CG})\omega = 0$ and substituting $\tau$ from the control law in \eqref{eq:control_law_attitude2} we are left with
+
+\begin{equation}
+    \dot{V} = \omega^\top( k_d \omega - k_p\tilde{\epsilon}) + k_p\tilde{\epsilon}^\top\omega = -k_d\omega^\top\omega
+\end{equation}
+
+Barbalat's lemma tells us that our $\omega$ will converge to zero if three conditions are satisfied: 
+
+\begin{itemize}
+    \item $V \geq 0$
+    \item $\dot{V} \leq 0$
+    \item $\dot{V}$ is uniformly continuous
+\end{itemize}
+
+We already proved the first one when we proved V is positive. For the second condition we can easily see that $\dot{V}$ as a negative quadratic function, due to $\omega^\top\omega \geq 0$ and $k_d \geq 0$ a constant, must be $\leq 0$.
+
+To prove $\dot{V}$ is uniformally continuous, we can take a look at $\ddot{V} = -2k_d\omega^\top\dot{\omega}$ and prove it to be bounded. We can assume the $\omega$, and thereby V, does not begin at $\infty$ and we know $\dot{V}$ is negative, meaning V is always sinking. However V will always be positive, meaning it must stop at 0. Thus $\omega$ will never increase beyond it's initial value. Knowing we are in physical system, it is reasonable to assume $\omega$ is continuous, thus $\dot{\omega}$ cannot go towards $\infty$. With neither $\omega \rightarrow \pm\infty$ nor $\dot{\omega} \pm\rightarrow \infty$, $\ddot{V} = -2k_d\omega^\top\dot{\omega}$ is bounded. Meaning $\dot{V}$ is uniformly continuous and Barbalat is satisfied. $\omega$ will converge to zero. \todo{Spør om dette}
+
+According to the corriculum book\cite{Fossen2011}, Barbalat's lemma only guarantees global convergence, meaning our convergence to the equilibrium point is indeed global.
+
+\subsubsection*{Asymptotic stability}
+
+We have a non-autonomous system so to check stability we may take a look at LaSalle-Yoshizawa's teorem. It states that
+
+\begin{itemize}
+    \item $V > 0$ and  $V(0) = 0$
+    \item $\dot{V} \leq 0$
+    \item V is radially unbounded
+\end{itemize}
+
+We have already proved the last two
+
+\todo{What about W?}
 
 \subsection*{Problem 1.8}
 ...

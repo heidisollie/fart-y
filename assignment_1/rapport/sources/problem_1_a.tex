@@ -113,24 +113,13 @@ The equation of motion of the satellite , equation \eqref{eq:x_dot}, represented
 \end{equation}
 
 
-The linearized  using equation \eqref{eq:f} , \eqref{eq:Jocobians} and equilibrium point $\mathbf{x}_0 = [0,0,0,0,0,0]$ and $\mathbf{u} = [0,0,0,0,0,0]$
+The linearized  closed-loop system was calculated using equation \eqref{eq:f} , \eqref{eq:Jocobians} and equilibrium point $\mathbf{x}_0 = [0,0,0,0,0,0]$ and $\mathbf{u} = [0,0,0,0,0,0]$. The lineariezd system $\Delta \dot{\mathbf{x}} = \mathbf{A}\Delta \mathbf{x} + \mathbf{Bu}$ , with matrixes $\mathbf{A}$ and $\mathbf{B}$ are represtented in equation \eqref{eq:linearized_sys_matrices} :
 
-\begin{equation}
-	\mathbf{A} = 
-	\begin{bmatrix}
-		0 & 0 & 0 & \frac{1}{2} & 0   & 0\\
-		0 & 0 & 0 & 0   & \frac{1}{2} & 0\\
-		0 & 0 & 0 & 0   & 0   & \frac{1}{2}\\
-		0 & 0 & 0 & 0 & 0 & 0\\
-		0 & 0 & 0 & 0 & 0 & 0\\
-		0 & 0 & 0 & 0 & 0 & 0\\
-	\end{bmatrix}
-\end{equation}
 
 \begin{equation}
     \begin{aligned}
 	\mathbf{A}
-	&= 
+	&=
 	\begin{bmatrix}
 		0 & 0 & 0 & \frac{1}{2} & 0   & 0\\
 		0 & 0 & 0 & 0   & \frac{1}{2} & 0\\
@@ -139,20 +128,8 @@ The linearized  using equation \eqref{eq:f} , \eqref{eq:Jocobians} and equilibri
 		0 & 0 & 0 & 0 & 0 & 0\\
 		0 & 0 & 0 & 0 & 0 & 0\\
 	\end{bmatrix}
-	=
-	\begin{bmatrix}
-		0 & 0 & 0 & \frac{1}{2} & 0   & 0\\
-		0 & 0 & 0 & 0   & \frac{1}{2} & 0\\
-		0 & 0 & 0 & 0   & 0   & \frac{1}{2}\\
-		0 & 0 & 0 & 0 & 0 & 0\\
-		0 & 0 & 0 & 0 & 0 & 0\\
-		0 & 0 & 0 & 0 & 0 & 0\\
-	\end{bmatrix}
-	\end{aligned}
-\end{equation}
-
-\begin{equation}
-	\mathbf{B} = 
+	&
+	\mathbf{B}& = 
 	\begin{bmatrix}
 		0 & 0 & 0 & 0 & 0 & 0\\
 		0 & 0 & 0 & 0 & 0 & 0\\
@@ -161,43 +138,62 @@ The linearized  using equation \eqref{eq:f} , \eqref{eq:Jocobians} and equilibri
 		0 & 0 & 0 & 0 & \frac{1}{400} & 0\\
 		0 & 0 & 0 & 0 & 0 & \frac{1}{400}\\
 	\end{bmatrix}
+	\end{aligned}
+	\label{eq:linearized_sys_matrices}
 \end{equation}
 
-For the remainder of this report the linearized states are symbolized as .
+\todo{write in Delta}
 
 \subsection*{Problem 1.2}
-Answer Problem 1.2 here. Bold words can be written as \textbf{something bold}. It is also possible to create a new section level:
-\subsubsection*{Inner Section 1}
-\emph{text..}
-
-\subsubsection*{Inner Section 2}
-...
-
-\subsection*{Problem 1.3}
-Answer Problem 1.3 here. Equation (2) from the assignment can be written as: 
+In this problem the following control law is suggested for for controlling the satellite  
 \begin{equation}
-  \label{eq:tau}
   \mathbf{\tau} = -\mathbf{K}_d \boldsymbol{\omega} - k_p \boldsymbol{\epsilon}
+  \label{eq:control_1}
 \end{equation}
 
-\subsection*{Problem 1.4}
-The quaternion error can be written as
- \begin{equation}
-	 \tilde{\mathbf{q}} := \left[
-	 \begin{array}{c}
-		 \tilde{\eta} \\
-		 \tilde{\epsilon}
-	 \end{array}
-	 \right] = \bar{\mathbf{q}}_d \otimes \mathbf{q} 
-	 \label{eq:q_tilde}
- \end{equation} 
- 
- \begin{equation}
-    \mathbf{\tau} = -\mathbf{K}_d \boldsymbol{\omega} - k_p \tilde{\boldsymbol{\epsilon}}
-    \label{eq:control_law_attitude2}
- \end{equation}
+with $\mathbf{K}_d = k_d \mathbf{I}_{3x3}$ , $k_d = 20$ and $k_p = 1$.  
 
-...
+\subsubsection*{Analysis of linarized system stability}
 
-% Note that \mathbf can be used for bold letters in math mode (within equations and dollar signs). \boldsymbol can be used to get bold greek letters.  
+The stability of the linearized system may be analysed by looking at the placement of the poles of the system.
+
+The control law represented in equation \eqref{eq:control_1} may be represented on the form $ \mathbf{u} = - \mathbf{K} \mathbf{x}$. The input to the system using control law from equation \eqref{eq:conrol_1} is:
+
+\begin{equation}
+\begin{aligned}
+    \mathbf{K}
+    &=
+    \begin{bmatrix}
+    0 & 0 & 0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0 & 0 & 0 \\ 
+    k_p & 0 & 0 & k_d & 0 & 0 \\ 
+    0 & k_p & 0 & 0 & k_d & 0 \\ 
+    0 & 0 & k_p & 0 & 0 & k_d \\ 
+    \end{bmatrix}
+\end{aligned}
+\end{equation}
+
+The linearized system is on the form $\Delta \mathbf{x} = \mathbf{A}\Delta \mathbf{x} + \mathbf{B} \Delta \mathbf{u}$, may with the control law in equation \eqref{eq:control_1} be written as $\Delta \dot{\mathbf{x}} = \mathbf{A}\Delta \mathbf{x} - \mathbf{B K} \Delta \mathbf{x} = ( \mathbf{A}\Delta  - \mathbf{B K} ) \Delta \mathbf{x} $.
+
+The poles of the system may be found by calculating the eigenvalues of $( \mathbf{A}\Delta  - \mathbf{B K} )$. The calculation of the eigenvalues was done by using the \texttt{MATLAB}-function \texttt{lambda = eig(A)}, with lambda being a vector of the eigenvalues of A. The functionality of finding the eigenvalues of the closed-loop system with control-law given in \eqref{eq:control_1} is implemented in the file
+{\color{blue}  stability\_system.m }. The eigenvalues are = $- 0.0250 \pm 0.0250i$, where 3 poles are corresponding . Since the real part of the eigenvalues are negative, the system is stable.
+
+\subsubsection*{Discussion real or imaginary poles}
+
+When placing poles were are multiple considerations to consider. Most likely you would want your system to be stable, meaning the poles of the system should be placed in the left half-plane. Real poles gives exponentially decaing components, where the rate is increases the more negative the poles are. While a complex conjugate pole pair in the left-half of the s-plane combines to generate a response component that is a decaying sinusoid. The rate of decay is specified by the real-part of the pole and the frequency is descided by the imaginary-part of the pole. This means a system with real-poles in left-half plane will steadly reach the correct value, while an imaginary poles in left-half plane may reach steady-state value faster than a real-pole but to the cost of stability. A system having one or more poles lying on the imaginary axis of the s-plane has non-decaying oscillatory components in its homogeneous response. In space this seams like a not wanted response in the system, because of less interrupting forces, like friction. 
+
+When choosing poles, the most important thing is to look into the dynamics of the system. Each pole effects a different part of the system.  
+
+Genereally since the satellite is in space, it should not have to big oscillations because of less interrupting forces. At the same time, with real poles as fast as complex-poles need more power, which a satellite may not have and may lead to more saturation.
+
+Since the satellite should be relatively fast, and do not have that much power it is suggested to have imaginary poles, with small oscillatory parts. This suggestion will lead to a bit faster satellite, which will save the satellite some power but to the expence of some less stability.  
+
+\subsection*{Problem 1.3}
+\subsubsection*{Simmulation of system with simple controller}
+
+{\color{blue}  stability\_system.m }
+
+
+
 
