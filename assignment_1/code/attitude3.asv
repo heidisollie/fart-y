@@ -122,9 +122,9 @@ subplot(312),plot(t,theta),hold on,plot(t,theta_d),xlabel('time (s)'),ylabel('de
 subplot(313),plot(t,psi),hold on, plot(t,psi_d),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid, legend('\psi', '\psi_d')
 
 figure(2)
-subplot(311),plot(t,w(:,1)),hold on, plot(t,w_d(:,1)), xlabel('time (s)'),ylabel('deg/s'),title('w_1'),grid,legend('w_1', 'w_{d,1}')
-subplot(312),plot(t,w(:,2)),hold on, plot(t,w_d(:,2)),xlabel('time (s)'),ylabel('deg'),title('w_2'),grid, legend('w_1', 'w_{d,2}')
-subplot(313),plot(t,w(:,3)),hold on,plot(t,w_d(:,3)),xlabel('time (s)'),ylabel('deg'),title('w_3'),grid, legend('w_1', 'w_{d,3}')
+subplot(414),plot(t,w(:,1)),hold on, plot(t,w_d(:,1)), xlabel('time (s)'),ylabel('deg/s'),title('w_1'),grid,legend('w_1', 'w_{d,1}')
+subplot(411),plot(t,w(:,2)),hold on, plot(t,w_d(:,2)),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid, legend('w_1', 'w_{d,2}')
+subplot(412),plot(t,w(:,3)),hold on,plot(t,w_d(:,3)),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid, legend('w_1', 'w_{d,3}')
 
 figure(3)
 subplot(411),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid, legend('\tau_1', '\tau_2', '\tau_3')
