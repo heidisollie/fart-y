@@ -6,10 +6,19 @@ The objective of problem 1 is to control attitude of a Satellite. The satellites
 \label{eq:dynamics}
 	\begin{align}
 		\dot{\mathbf{q}} = \mathbf{T}_q (\mathbf{q} ) \boldsymbol{\omega} \\
-		\mathbf{I}_{CG} \dot{\boldsymbol{\omega}} - \mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} & =  \boldsymbol{\tau} \label{eq:omega_dot}
+		\mathbf{I}_{CG} \dot{\boldsymbol{\omega}} - \mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} & =  \boldsymbol{\tau} 
+		\label{eq:EOM_omega_dot}
 	\end{align}	
 \end{subequations}
 
+This equations uses the unit quaternions and Euler angles. The unit  quaternions are represented as $q = [\eta, \epsilon_1, \epsilon_2, \epsilon_3]^T$ and only the positive $\eta$ is used, leading to equations \eqref{eq:pos_eta}. The Euler angles are represented as $\theta = [\phi , \theta , \psi]^\top$ and their representative angular velocities are  $\omega = [\omega_1, \omega_2, \omega_3]$. In \cite{Fossen2011} $\omega$ is often written as $\omega = [p,q,r]$, but because of the parameter $r = 2.0m$, in this rapport $\omega$ is written as $[\omega_1, \omega_2, \omega_3]^\top$.
+
+\begin{equation}
+    \eta = \sqrt{1 - \epsilon^\top \epsilon} 
+    \label{eq:pos_eta}
+\end{equation}
+ 
+In this lab rapport the state of the system $x = [ \boldsymbol{\epsilon}^T, \boldsymbol{\omega}^\top]$ and the input to the system $\mathbf{u} = \boldsymbol[0,0,0,\tau_1, \tau_2, \tau_3]^\top$. The reason for the upper three zeros in the input, is because of $\dot{\boldsymbol{\epsilon}}$ do not have any input, while $\dot{\boldsymbol{\omega}}$ have input $\boldsymbol{\tau}$.
 
 \todo{Should we write introduction ?}
 
@@ -20,26 +29,67 @@ The objective of problem 1 is to control attitude of a Satellite. The satellites
 The equilibrium point is defined as the steady-state solution of a system, meaning $\dot{\mathbf{x}} = 0$ with $\mathbf{x}$ being the state of the system.
 
 
-The equilibrium point $\mathbf{x_0}$ of the closed-loop system $\mathbf{x} = [ \boldsymbol{\epsilon}^T, \boldsymbol{\omega}^T]^T$ corresponding to $\mathbf{q} = [\eta,\epsilon_1, \epsilon_2, \epsilon_3]^T = [1, 0, 0, 0]$ and $\boldsymbol{\tau} = \boldsymbol{0}$ may be found by setting $\boldsymbol{\epsilon} = \mathbf{0}$ and $\dot{\boldsymbol{\omega}} = \mathbf{0}$. The equation for $\boldsymbol{\epsilon}$ and $\boldsymbol{\omega}$ may be found by using equation (2.86) in \cite{Fossen2011} and \eqref{eq:omega_dot}. From equation (2.86) in \cite{Fossen2011} and \eqref{eq:omega_dot} the following equations was found:
+The equilibrium point $\mathbf{x_0}$ of the closed-loop system $\mathbf{x} = [ \boldsymbol{\epsilon}^T, \boldsymbol{\omega}^T]^T$ corresponding to $\mathbf{q} = [\eta,\epsilon_1, \epsilon_2, \epsilon_3]^T = [1, 0, 0, 0]$ and $\boldsymbol{\tau} = \boldsymbol{0}$ may be found by setting $\dot{\boldsymbol{\epsilon}} = \mathbf{0}$ and $\dot{\boldsymbol{\omega}} = \mathbf{0}$. The equation for $\boldsymbol{\epsilon}$ and $\boldsymbol{\omega}$ may be found by using equation (2.86) in \cite{Fossen2011} and \eqref{eq:EOM_omega_dot}. From equation (2.86) in \cite{Fossen2011} and \eqref{eq:EOM_omega_dot} the following equations was found:
 
 
 \begin{subequations}
 \label{eq:x_dot}
 	\begin{align}
-		\dot{\boldsymbol{\epsilon}} =  [ \eta \mathbf{I}_{3X3} + \mathbf{S}(\boldsymbol{\epsilon}) ] \boldsymbol{\omega} \\
-		 \dot{\boldsymbol{\omega}} = \mathbf{I}_{CG}^{-1} [\mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} +  \boldsymbol{\tau} ]
+		\dot{\boldsymbol{\epsilon}} =  [ \eta \mathbf{I}_{3X3} + \mathbf{S}(\boldsymbol{\epsilon}) ] \boldsymbol{\omega}  \label{eq:episilon_dot} \\
+		 \dot{\boldsymbol{\omega}} = \mathbf{I}_{CG}^{-1} [\mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} +  \boldsymbol{\tau} ] \label{eq:omega_dot}
 	\end{align}	
 \end{subequations}
 
-\todo{Write T ad top}
+\todo{Write top instead of T }
+\todo{Should I take in equation 2.68 ?}
 
-With $\mathbf{S} (\mathbf{I}_{CG}$ being the skewmatrix of $\boldsymbol{\epsilon} = [\epsilon_1, \epsilon_2, \epsilon_3]^\top$. By using equation \eqref{eq:x_dot},   $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$ the equilibrium point $\mathbf{x} = [0, 0, 0, 0]^\top$.
+With $\mathbf{S} (\boldsymbol{\epsilon})$ and being the skewmatrix $\mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) $, as defined in \cite{Fossen2011} equation ???? \todo{need to find reference} . Equation \eqref{eq:episilon_dot} may be written as:
+
+\begin{equation}
+    \begin{aligned}
+	\dot{\boldsymbol{\epsilon}}
+	&= 
+	\left \{
+	\begin{bmatrix}
+		\sqrt{1-\boldsymbol{\epsilon}^\top \boldsymbol{\epsilon}} & 0 &  0  \\
+		0 & \sqrt{1-\boldsymbol{\epsilon}^\top \boldsymbol{\epsilon}} &   0   \\
+		0 &  0  & \sqrt{1-\boldsymbol{\epsilon}^\top \boldsymbol{\epsilon}} 
+	\end{bmatrix}
+	+
+	\begin{bmatrix}
+		0 & -\epsilon_3 &  \epsilon_2   \\
+		\epsilon_3 & 0 &   - \epsilon_1   \\
+		-\epsilon_2 &  \epsilon_1  & 0
+	\end{bmatrix}
+	\right \} 
+	\begin{bmatrix}
+		\omega_1  \\
+		\omega_2  \\
+		\omega_3  \\
+	\end{bmatrix}
+	\end{aligned}
+	\label{eq:epsilon_dot_full}
+\end{equation}
+
+By using equation \eqref{eq:epsilon_dot_full},   $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$ the equilibrium point $\mathbf{x} = [0, 0, 0, 0]^\top$. Since equation \eqref{eq:epsilon_dot_full} have 3 unkonwn parameters and 3 equations, it was not needed to include equation \eqref{eq:omega_dot}. Another problem with using equation \eqref{eq:omega_dot} is that by using the constraints  $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$ gives only 2 equations, and 3 unkonwn parameters ( $\omega_1, \omega_2, \omega_3$).
 
 \todo{Should we write more about the calculations?}
 
 \subsubsection*{Linearize the equations of motion}
 
-Linearization: 
+A general linearized model is $ \Delta \dot{\mathbf{x}} = \mathbf{A} \Delta \mathbf{x} + \mathbf{B} \Delta \mathbf{u}$. $\Delta \mathbf{x} = \mathbf{x} - \mathbf{x}_0$ are the linearized coordinate transformed states of the system and $\Delta \mathbf{u} = \mathbf{u} - \mathbf{u}_0$ are the corresponding coordinate transformed input. 
+
+A system of the form $\dot{\mathbf{x}} = f(\mathbf{x , u})$, may be linearized by using \eqref{eq:Jocobians}. In equation \eqref{eq:Jocobians} the matrices \textbf{A} and \textbf{B} of the linearized system is calculated by using the Jacobians of $f(\mathbf{x,\boldsymbol{\tau}}$, and the equlibrium point. 
+
+\begin{equation}
+    \begin{aligned}
+        \mathbf{A}&= \frac{\partial f(\mathbf{x,\boldsymbol{\tau}})}{\partial \mathbf{x}}\Bigr|_{\substack{\mathbf{x}= \mathbf{x}_0 \\ \boldsymbol{\tau=0 }}} &
+        \mathbf{B}&= \frac{\partial f(\mathbf{x,\boldsymbol{\tau}})}{\partial \mathbf{u}}\Bigr|_{\substack{\mathbf{x}= \mathbf{x}_0 \\ \boldsymbol{\tau=0 }}} 
+    \end{aligned}
+    \label{eq:Jocobians}
+\end{equation}
+
+The equation of motion of the satellite , equation \eqref{eq:x_dot}, represented as a function of the form $\dot{\mathbf{x}} = f(\mathbf{x , u})$ are:
 
 \begin{equation}
     \begin{aligned}
@@ -58,9 +108,12 @@ Linearization:
 		\tau_2 \frac{1}{mr^2}\\
 		\tau_3 \frac{1}{mr^2}\\
 	\end{bmatrix}
+	\label{eq:f}
 	\end{aligned}
 \end{equation}
 
+
+The linearized  using equation \eqref{eq:f} , \eqref{eq:Jocobians} and equilibrium point $\mathbf{x}_0 = [0,0,0,0,0,0]$ and $\mathbf{u} = [0,0,0,0,0,0]$
 
 \begin{equation}
 	\mathbf{A} = 
@@ -110,6 +163,7 @@ Linearization:
 	\end{bmatrix}
 \end{equation}
 
+For the remainder of this report the linearized states are symbolized as .
 
 \subsection*{Problem 1.2}
 Answer Problem 1.2 here. Bold words can be written as \textbf{something bold}. It is also possible to create a new section level:
@@ -137,6 +191,11 @@ The quaternion error can be written as
 	 \right] = \bar{\mathbf{q}}_d \otimes \mathbf{q} 
 	 \label{eq:q_tilde}
  \end{equation} 
+ 
+ \begin{equation}
+    \mathbf{\tau} = -\mathbf{K}_d \boldsymbol{\omega} - k_p \tilde{\boldsymbol{\epsilon}}
+    \label{eq:control_law_attitude2}
+ \end{equation}
 
 ...
 
