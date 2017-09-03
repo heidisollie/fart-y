@@ -52,8 +52,15 @@ We can see from \Cref{fig:sim_attitude3_euler} that the satellite is now able to
 \begin{figure}
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/3_euler.eps}
-	\caption{The resulting output euler angles with their corresponding desired values and the resulting output $\omega$ (denoted $\mathbf{w}$ in the plot) from the simulation in attitude3.}
+	\caption{The resulting output euler angles with their corresponding desired values from the simulation in attitude3.}
 \label{fig:sim_attitude3_euler}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.00\textwidth]{figures/3_omega.eps}
+	\caption{The resulting output $\omega$ (denoted $\mathbf{w}$ in the plots) and the corresponding desired values from the simulation in attitude3.}
+\label{fig:sim_attitude3_omega}
 \end{figure}
 
 \begin{figure}
@@ -69,7 +76,11 @@ Assuming $\omega_d = 0$ and $\epsilon_d$ and $\eta_d$ constants and the control 
 	 V = \frac{1}{2} \tilde{\boldsymbol{\omega}}^{\top} \mathbf{I}_{CG}\tilde{\boldsymbol{\omega}} + 2 k_p (1-\tilde{\eta})
  \end{equation}
  
-is positive and radially unbounded. The reason for its positivity is that $\mathbf{I}_{CG}$ being an identity matrix with a positive number, $mr^2$, on its diagonal, is positive definite. So the first part of V is positive (labeling 0 as a positive number). The second part, consisting of $2 k_p (1-\tilde{\eta})$, may only be negative if $\tilde{\eta} > 1$. This will never happen however, as $\tilde{\eta}$ is part of the unit quaternion $\tilde{q}$
+is positive and radially unbounded. 
+
+The reason for its positivity is that $\mathbf{I}_{CG}$ being an identity matrix with a positive number, $mr^2$, on its diagonal, is positive definite. So the first part of V is positive (labeling 0 as a positive number). The second part, consisting of $2 k_p (1-\tilde{\eta})$, may only be negative if $\tilde{\eta} > 1$. This will never happen however, as $\tilde{\eta}$ is part of the unit quaternion $\tilde{q}$ making $|\tilde{\eta}| \leq 1$. Thus the second part of V will also be positive. The Lyapunov function is usually thought of as a representation of the energy in the system so the fact that it is never negative makes sense. 
+
+The function is radially unbounded 
 
 \subsection*{Problem 1.8}
 ...
