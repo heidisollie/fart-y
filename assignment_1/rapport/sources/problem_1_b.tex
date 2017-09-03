@@ -47,7 +47,7 @@ We used the MATLAB function \texttt{eulerang()} to get the $\mathbf{T}_{\Theta_d
 
 \subsubsection*{Simulation results}
 
-We can see from \Cref{fig:sim_attitude3_euler} that the satellite is now able to follow the given reference signal in both angles and angle velocities. From \Cref{sim_attitude3_track} we can see that though there still is an error in the $\phi$ and $\psi$ they are much smaller than previously. Now that $\omega$ and $\epsilon$ have corresponding desired values, they can both be satisfied by the same actions. The cooperation between the two parts of the state, which are in themselves related, is key to making a good controller. The linearization error discussed in the previous problem may still endure, but all in all the satellite control is much better than before.
+We can see from \Cref{fig:sim_attitude3_euler} that the satellite is now able to follow the given reference signal in both angles and angle velocities. From \Cref{fig:sim_attitude3_track} we can see that though there still is an error in the $\phi$ and $\psi$ they are much smaller than previously. Now that $\omega$ and $\epsilon$ have corresponding desired values, they can both be satisfied by the same actions. The cooperation between the two parts of the state, which are in themselves related, is key to making a good controller. The linearization error discussed in the previous problem may still endure, but all in all the satellite control is much better than before.
 
 \begin{figure}
 	\centering
@@ -64,12 +64,12 @@ We can see from \Cref{fig:sim_attitude3_euler} that the satellite is now able to
 \end{figure}
 
 \subsection*{Problem 1.7}
-Assuming $\omega_d = 0$ and $\epsilon_d$ and $\eta_d$ constants and the control law given by \eqref{eq:control_law_attitude2} the Lyapunov function 
+Assuming $\omega_d = 0$ and $\epsilon_d$ and $\eta_d$ constants and the control law given by \eqref{eq:control_law_attitude2}, the Lyapunov function 
  \begin{equation}
 	 V = \frac{1}{2} \tilde{\boldsymbol{\omega}}^{\top} \mathbf{I}_{CG}\tilde{\boldsymbol{\omega}} + 2 k_p (1-\tilde{\eta})
  \end{equation}
  
-is positive and radially unbounded. The reason for its positivity is that $\mathbf{I}_{CG}$ being an identity matrix with a positive number, $mr^2$, on its diagonal, is positive definite. So the first part of V is positive (labeling 0 as a positive number). The second part, consisting of $2 k_p (1-\tilde{\eta})$, may only be negative if $\eta$
+is positive and radially unbounded. The reason for its positivity is that $\mathbf{I}_{CG}$ being an identity matrix with a positive number, $mr^2$, on its diagonal, is positive definite. So the first part of V is positive (labeling 0 as a positive number). The second part, consisting of $2 k_p (1-\tilde{\eta})$, may only be negative if $\tilde{\eta} > 1$. This will never happen however, as $\tilde{\eta}$ is part of the unit quaternion $\tilde{q}$
 
 \subsection*{Problem 1.8}
 ...
