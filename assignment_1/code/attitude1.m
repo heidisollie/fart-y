@@ -88,7 +88,7 @@ subplot(311),plot(t,phi),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
 subplot(312),plot(t,theta),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
 subplot(313),plot(t,psi),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
 figure(3)
-subplot(211),plot(t,q),xlabel('time (s)'),ylabel('rad'),title('q'),grid, legend('\eta', '\epsilon_1', '\epsilon_2', '\epsilon_3')
-subplot(212),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid, legend('w_1', 'w_2', 'w_3')
+%subplot(211),plot(t,q),xlabel('time (s)'),ylabel('rad'),title('q'),grid, legend('\eta', '\epsilon_1', '\epsilon_2', '\epsilon_3')
+subplot(111),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid, legend('w_1', 'w_2', 'w_3')
 figure(2)
 subplot(111),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid, legend('\tau_1', '\tau_2', '\tau_3')

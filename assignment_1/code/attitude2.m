@@ -115,5 +115,5 @@ subplot(414),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid,legend
 figure(2)
 subplot(411),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid, legend('\tau_1', '\tau_2', '\tau_3')
 subplot(412),plot(t,phi_error),xlabel('time (s)'),ylabel('deg'),title('tracking error \phi'),grid
-subplot(413),plot(t,theta_error),xlabel('time (s)'),ylabel('deg'),title('\theta tracking error \theta '),grid
-subplot(414),plot(t,psi_error),xlabel('time (s)'),ylabel('deg'),title('\psi tracking error \psi'),grid
+subplot(413),plot(t,theta_error),xlabel('time (s)'),ylabel('deg'),title('tracking error \theta '),grid
+subplot(414),plot(t,psi_error),xlabel('time (s)'),ylabel('deg'),title('tracking error \psi'),grid
