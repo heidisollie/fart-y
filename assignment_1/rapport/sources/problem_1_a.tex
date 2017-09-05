@@ -1,6 +1,7 @@
 \section*{Problem 1 - Attitude Control of Satellite}
+\addcontentsline{toc}{section}{Problem 1 - Attitude Control of Satellite}
 
-The objective of problem 1 is to control attitude of a satellite. The satellites equations of motions are represented in equation \eqref{eq:dynamics},  \cite{Fossen2011}. The parameters for this specific satellite are; $\mathbf{I}_{CG} = mr^2$, $m = 100 kg$, $r = 2.0 m$.  
+The objective of problem 1 is to control attitude of a satellite. The satellites equations of motions are represented in equation \eqref{eq:dynamics},  \cite{Fossen2011}. The parameters for this specific satellite are: $\mathbf{I}_{CG} = mr^2 \mathbf{I}_{3x3}$, $m = 100 kg$, $r = 2.0 m$.  
 
 \begin{subequations}
 \label{eq:dynamics}
@@ -11,7 +12,7 @@ The objective of problem 1 is to control attitude of a satellite. The satellites
 	\end{align}	
 \end{subequations}
 
-These equations uses the unit quaternions and Euler angles. The unit  quaternions are represented as $q = [\eta, \epsilon_1, \epsilon_2, \epsilon_3]^\top$ and only the positive $\eta$ is used, leading to equations \eqref{eq:pos_eta}. The Euler angles are represented as $\theta = [\phi , \theta , \psi]^\top$ and their representative angular velocities are  $\omega = [\omega_1, \omega_2, \omega_3]$. In \cite{Fossen2011} $\omega$ is often written as $\omega = [p,q,r]$, but because of the parameter $r = 2.0m$, in this rapport $\omega$ is written as $[\omega_1, \omega_2, \omega_3]^\top$.
+These equations uses the unit quaternions and Euler angles. The unit  quaternions are represented as $q = [\eta, \epsilon_1, \epsilon_2, \epsilon_3]^\top$ and only the positive $\eta$ is used, leading to equations \eqref{eq:pos_eta}. The Euler angles are represented as $\Theta = [\phi , \theta , \psi]^\top$ and their representative angular velocities are  $\omega = [\omega_1, \omega_2, \omega_3]$. In \cite{Fossen2011} $\omega$ is often written as $\omega = [p,q,r]$, but because of the parameter $r = 2.0m$, in this rapport $\omega$ is written as $[\omega_1, \omega_2, \omega_3]^\top$.
 
 \begin{equation}
     \eta = \sqrt{1 - \epsilon^\top \epsilon} 
@@ -21,8 +22,10 @@ These equations uses the unit quaternions and Euler angles. The unit  quaternion
 In this lab report the state of the system $x = [ \boldsymbol{\epsilon}^\top, \boldsymbol{\omega}^\top]$ and the input to the system $\mathbf{u} = \boldsymbol[0,0,0,\tau_1, \tau_2, \tau_3]^\top$. The reason for the upper three zeros in the input, is because of $\dot{\boldsymbol{\epsilon}}$ do not have any input, while $\dot{\boldsymbol{\omega}}$ have input $\boldsymbol{\tau}$.
 
 \subsection*{Problem 1.1}
+\addcontentsline{toc}{subsection}{Problem 1.1}
 
 \subsubsection*{Finding the equilibrium point}
+\addcontentsline{toc}{subsubsection}{Finding the equilibrium point}
 
 The equilibrium point is defined as the steady-state solution of a system, meaning $\dot{\mathbf{x}} = 0$ and $\mathbf{u}= \mathbf{0}$. \todo{Enig Alexandra ? }
 
@@ -31,7 +34,7 @@ The equilibrium point $\mathbf{x_0}$ of the closed-loop system $\mathbf{x} = [ \
 \begin{subequations}
 \label{eq:x_dot}
 	\begin{align}
-		\dot{\boldsymbol{\epsilon}} =  [ \eta \mathbf{I}_{3X3} + \mathbf{S}(\boldsymbol{\epsilon}) ] \boldsymbol{\omega}  \label{eq:episilon_dot} \\
+		\dot{\boldsymbol{\epsilon}} =  \frac{1}{2} [ \eta \mathbf{I}_{3X3} + \mathbf{S}(\boldsymbol{\epsilon}) ] \boldsymbol{\omega}  \label{eq:episilon_dot} \\
 		 \dot{\boldsymbol{\omega}} = \mathbf{I}_{CG}^{-1} [\mathbf{S} (\mathbf{I}_{CG} \boldsymbol{\omega} ) \boldsymbol{\omega} +  \boldsymbol{\tau} ] \label{eq:omega_dot}
 	\end{align}	
 \end{subequations}
@@ -44,6 +47,7 @@ With skew-matrices $\mathbf{S} (\boldsymbol{\epsilon})$ and $\mathbf{S} (\mathbf
     \begin{aligned}
 	\dot{\boldsymbol{\epsilon}}
 	&= 
+	\frac{1}{2}
 	\left \{
 	\begin{bmatrix}
 		\sqrt{1-\boldsymbol{\epsilon}^\top \boldsymbol{\epsilon}} & 0 &  0  \\
@@ -66,15 +70,16 @@ With skew-matrices $\mathbf{S} (\boldsymbol{\epsilon})$ and $\mathbf{S} (\mathbf
 	\label{eq:epsilon_dot_full}
 \end{equation}
 
-By using equation \eqref{eq:epsilon_dot_full},   $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$ the equilibrium point $\mathbf{x} = [0, 0, 0, 0]^\top$. Since equation \eqref{eq:epsilon_dot_full} have 3 unknown parameters and 3 equations, it was not necessary to include equation \eqref{eq:omega_dot}. Equation \eqref{eq:omega_dot} alone only gives 2 equations and 3 unknown parameters ( $\omega_1, \omega_2, \omega_3$), because of the constraints  $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$.
+By using equation \eqref{eq:epsilon_dot_full},   $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$ the equilibrium point  is found to be $\mathbf{x}_0 = [0, 0, 0, 0,0,0]^\top$. Since equation \eqref{eq:epsilon_dot_full} have 3 unknown parameters and 3 equations, it was not necessary to include equation \eqref{eq:omega_dot}. Equation \eqref{eq:omega_dot} alone only gives 2 equations and 3 unknown parameters ( $\omega_1, \omega_2, \omega_3$), because of the constraints  $\mathbf{q} = [1, 0, 0, 0]^\top$ and $\boldsymbol{\tau} = \boldsymbol{0}$.
 
-\todo{Should we write more about the calculations?}
+
 
 \subsubsection*{Linearization of  the equations of motion}
+\addcontentsline{toc}{subsubsection}{Linearization of  the equations of motion}
 
-A general linearized model is $ \Delta \dot{\mathbf{x}} = \mathbf{A} \Delta \mathbf{x} + \mathbf{B} \Delta \mathbf{u}$. $\Delta \mathbf{x} = \mathbf{x} - \mathbf{x}_0$ are the linearized coordinate transformed states of the system and $\Delta \mathbf{u} = \mathbf{u} - \mathbf{u}_0$ is the corresponding coordinate transformed input.
+A linearization of a function is the first order of its Taylor expansion around the pint of interest, which is the equilibrium point. A general linearized model is $ \Delta \dot{\mathbf{x}} = \mathbf{A} \Delta \mathbf{x} + \mathbf{B} \Delta \mathbf{u}$. $\Delta \mathbf{x} = \mathbf{x} - \mathbf{x}_0$ are the linearized coordinate transformed states of the system and $\Delta \mathbf{u} = \mathbf{u} - \mathbf{u}_0$ is the corresponding coordinate transformed input. 
 
-A system of the form $\dot{\mathbf{x}} = f(\mathbf{x , u})$, may be linearized by using \eqref{eq:Jocobians}. In equation \eqref{eq:Jocobians} the matrices \textbf{A} and \textbf{B} are the matrices of the linearized system, and are calculated by using the Jacobians of $f(\mathbf{x,\boldsymbol{\tau}}$, and the equilibrium point.  
+A system of the form $\dot{\mathbf{x}} = f(\mathbf{x , u})$, may be linearized by using \eqref{eq:Jocobians}. In equation \eqref{eq:Jocobians} the matrices \textbf{A} and \textbf{B} are the matrices of the linearized system, and are calculated by using the Jacobians of $f(\mathbf{x},\mathbf{u}) $, and the equilibrium point.  
 
 \begin{equation}
     \begin{aligned}
@@ -92,8 +97,6 @@ The equation of motion of the satellite , equation \eqref{eq:x_dot}, is rewritte
 		\dot{\boldsymbol{\epsilon}} \\
 		\dot{\boldsymbol{\omega}}
     \end{bmatrix}
-    &=
-	\mathbf{f(\mathbf{x},t)} 
 	&= 
 	\begin{bmatrix}
 		\frac{1}{2}[ \sqrt{1-\boldsymbol{\epsilon}^\top \boldsymbol{\epsilon}} \omega_1  - \epsilon_3 \omega_2 + \epsilon_2 \omega_3  ] \\
@@ -115,6 +118,12 @@ The linearized  closed-loop system was calculated using equation \eqref{eq:f} , 
     \begin{aligned}
 	\mathbf{A}
 	&=
+	\frac{1}{2}
+	\begin{bmatrix}
+		\mathbf{0}_{3x3} & \mathbf{I}_{3x3}\\
+		\mathbf{0}_{3x3} & \mathbf{0}_{3x3}\\
+	\end{bmatrix}
+	=
 	\begin{bmatrix}
 		0 & 0 & 0 & \frac{1}{2} & 0   & 0\\
 		0 & 0 & 0 & 0   & \frac{1}{2} & 0\\
@@ -125,6 +134,11 @@ The linearized  closed-loop system was calculated using equation \eqref{eq:f} , 
 	\end{bmatrix}
 	&
 	\mathbf{B}& = 
+	\frac{1}{mr^2}
+	\begin{bmatrix}
+		\mathbf{0}_{3x3} & \mathbf{0}_{3x3}\\
+		\mathbf{0}_{3x3} & \mathbf{I}_{3x3}\\
+	\end{bmatrix}
 	\begin{bmatrix}
 		0 & 0 & 0 & 0 & 0 & 0\\
 		0 & 0 & 0 & 0 & 0 & 0\\
@@ -139,20 +153,23 @@ The linearized  closed-loop system was calculated using equation \eqref{eq:f} , 
 
 
 \subsection*{Problem 1.2}
-In this problem the following control law is suggested for for controlling the satellite: 
+\addcontentsline{toc}{subsection}{Problem 1.2}
+
+In this problem the following control law was suggested for for controlling the satellite: 
 
 \begin{equation}
-  \mathbf{\tau} = -\mathbf{K}_d \boldsymbol{\omega} - k_p \boldsymbol{\epsilon}
+  \boldsymbol{\tau} = -\mathbf{K}_d \boldsymbol{\omega} - k_p \boldsymbol{\epsilon}
   \label{eq:control_1}
 \end{equation}
 
 with $\mathbf{K}_d = k_d \mathbf{I}_{3x3}$ , $k_d = 20$ and $k_p = 1$.  
 
-\subsubsection*{Analysis of stability for  linearized system}
+\subsubsection*{Analysis of stability of  linearized system}
+\addcontentsline{toc}{subsubsection}{Analysis of stability of linearized system}
 
 The stability of the linearized system may be analysed looking at the placement of the poles of the system.
 
-The control law in equation \eqref{eq:control_1} may be represented on the form $ \mathbf{u} = - \mathbf{K} \mathbf{x}$. The input to the system using control law from equation \eqref{eq:control_1} is:
+The control law in equation \eqref{eq:control_1} may be represented on the form $ \mathbf{u} = - \mathbf{K} \mathbf{x}$. Using the control law , from equation \eqref{eq:control_1}, the The $ \mathbf{K} $-matrix is:
 
 \begin{equation}
 \begin{aligned}
@@ -170,56 +187,60 @@ The control law in equation \eqref{eq:control_1} may be represented on the form 
 \end{aligned}
 \end{equation}
 
-The linearized system is on the form $\Delta \dot{ \mathbf{x}} = \mathbf{A} \Delta \mathbf{x} + \mathbf{B} \Delta \mathbf{u}$, that together with the control law in equation \eqref{eq:control_1} may be written as $\Delta \dot{\mathbf{x}} = \mathbf{A}\Delta \mathbf{x} - \mathbf{B K} \Delta \mathbf{x} = ( \mathbf{A}\Delta  - \mathbf{B K} ) \Delta \mathbf{x} $.
+The linearized system is on the form $\Delta \dot{ \mathbf{x}} = \mathbf{A} \Delta \mathbf{x} + \mathbf{B} \Delta \mathbf{u}$, that together with the control law in equation \eqref{eq:control_1} may be written as $\Delta \dot{\mathbf{x}} = \mathbf{A}\Delta \mathbf{x} - \mathbf{B K} \Delta \mathbf{x} = ( \mathbf{A} - \mathbf{B K} ) \Delta \mathbf{x} $.
 
-The poles of the system may be found by calculating the eigenvalues of $( \mathbf{A}\Delta  - \mathbf{B K} )$. The calculation of the eigenvalues was done by using the \texttt{MATLAB}-function \texttt{lambda = eig(A)}, with lambda being a vector of the eigenvalues of the closed-loop system with the simple controller. The functionality of finding the eigenvalues of the closed-loop system with control-law given in \eqref{eq:control_1} is implemented in the file
+The poles of the system may be found by calculating the eigenvalues of $( \mathbf{A}   - \mathbf{B K} )$. The calculation of the eigenvalues was done by using the \texttt{MATLAB}-function \texttt{lambda = eig(A)}, with lambda being a vector of the eigenvalues of the closed-loop system with the simple controller. The functionality of finding the eigenvalues of the closed-loop system with control-law given in \eqref{eq:control_1} is implemented in the file
 {\color{blue}  stability\_system.m }. The eigenvalues were found to be = $- 0.0250 \pm 0.0250i$, where 3 poles are coinciding. Since the real part of the eigenvalues are negative, the system is stable.
 
 \subsubsection*{Discussion of significance of real or imaginary poles}
+\addcontentsline{toc}{subsubsection}{Discussion of significance of real or imaginary poles}
 
-When placing poles there are multiple considerations to take into account. Typically the system should be stable, meaning the poles of the system should be placed in the left half of the s-plane. A system having one or more poles lying on the imaginary axis of the s-plane has non-decaying oscillatory components in its homogeneous response. Real poles gives exponentially decaying response components, where the rate increases for more negative poles. With a complex conjugate pole pair in the left-half of the s-plane the combined effect is generate response component that is a decaying sinusoidal. The rate of decay for complex poles is specified by the real-part of the pole and the frequency is decided by the imaginary-part of the pole. This means a system with real poles in left-half plane will steadily approach the correct value, while an imaginary pole in left-half plane may reach steady-state value faster than a real-pole on the cost of stability.
+When placing poles there are multiple considerations to take into account. Typically the system should be stable, meaning the poles of the system should be placed in the left half of the s-plane. A system having one or more poles lying on the imaginary axis of the s-plane has non-decaying oscillatory components in its homogeneous response. Real poles gives exponentially decaying response components, where the rate increases for more negative poles. With a complex conjugate pole pair in the left-half of the s-plane the combined effect generate response component that is a decaying sinusoidal. The rate of decay for complex poles is specified by the real-part of the pole and the frequency is decided by the imaginary-part of the pole. This means a system with real poles in left-half plane will steadily approach the correct value, while an imaginary pole in left-half plane may reach steady-state value faster than a real-pole on the cost of stability. 
 
 When choosing poles, the most important thing is to look into the dynamics of the system. Each pole affects a different part of the system.  
 
-Generally since the satellite is in space, it should not have too heavy oscillations because of less interrupting (and stabilizing) forces. At the same time, adjusting real poles to give as fast response as complex-poles, will imply more power needed. A satellite will have limited thruster capacity, which may lead to saturation on the input to the controller.
+Generally since the satellite is in space, it should not have too heavy oscillations because of less interrupting (and stabilizing) forces and being in vacuum. At the same time, adjusting real poles to give as fast response as complex-poles, will imply more power needed. A satellite will have limited thruster capacity, which may lead to saturation on the input to the controller.
 
-Since the satellite should be relatively fast, with limited thrust power, it is suggested to have imaginary poles, with small oscillatory parts. This suggestion will lead to a slightly faster positioning response of the satellite, and at the same time save some thrust power but at the expense of somewhat reduced stability.   
+Since the satellite should be relatively fast, with limited thrust power, it is suggested to have imaginary poles, with small imaginary parts /oscillatory parts. This suggestion will lead to a slightly faster positioning response of the satellite, and at the same time save some thrust power but at the expense of somewhat reduced stability.   
 
 \subsection*{Problem 1.3}
+\addcontentsline{toc}{subsection}{Problem 1.3}
+
 \subsubsection*{Simulation of system with simple controller}
+\addcontentsline{toc}{subsubsection}{Simulation of system with simple controller}
 
 In {\color{blue}  attitude1.m } the system is simulated with a controller based on the the control law from \eqref{eq:control_1}. This is done by using a for-loop initialized with Euler-parameters $\phi = 10 \circ$, $\theta = -5 \circ$ and $\psi = 15  \circ$. To initialize the unit quaternion-parameters the \texttt{MATLAB}-function \texttt{q = euler2q(phi,theta,psi)} from the library \texttt{MSS} was used. The function transforms from Euler-angles to unit quaternions. The angular velocity $\boldsymbol{\omega}$ is initialized to $\mathbf{0}$. 
  
-The simulated state-response is calculated through a for-loop. The for-loop input is first calculated using the state, with $\mathbf{u} = -\mathbf{K}\mathbf{x}$, with K from \eqref{eq:K}. Second the Euler angles is calculated based on the state, using the  \texttt{MATLAB}-function \texttt{[phi,theta,psi] = q2euler(q)}.  From the equation of motion, \eqref{eq:x_dot}, $\dot{\mathbf{x}}$ is calculated. The next state is estimated using Euler integration on quaternion-coordinates $\mathbf{q}$ and the angular velocities $\mathbf{omega}$. First the quaternions are normalized, such that it is unit quaternions. The Euler angles, unit quaternions and angular-velocities are saved in a variable table, used for plotting.
+The simulated state-response is calculated through a for-loop. The for-loop input is first calculated using the state, with $\mathbf{u} = -\mathbf{K}\mathbf{x}$, with K from \eqref{eq:K}. Second the Euler angles is calculated based on the state, using the  \texttt{MATLAB}-function \texttt{[phi,theta,psi] = q2euler(q)}.  From the equation of motion, \eqref{eq:x_dot}, $\dot{\mathbf{x}}$ is calculated. The next state is estimated using Euler integration on quaternion-coordinates $\mathbf{q}$ and the angular velocities $\mathbf{\omega}$. First the quaternions are normalized, such that it is unit quaternions. The Euler angles, unit quaternions and angular-velocities are saved in a variable table, used for plotting.
 
 The result after the plotting are represented in Figure \ref{fig:sim_attitude1_euler} - \ref{fig:sim_attitude1_tau}. 
 
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/1_euler.eps}
-	\caption{The resulting output Euler angles from the simulation in attitude1.m}
+	\caption{The resulting output Euler angles from the simulation in {\color{blue}attitude1.m}}
 \label{fig:sim_attitude1_euler}
 \end{figure}
 
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/1_q.eps}
-	\caption{The resulting state $x = [\boldsymbol{\eta}^\top, \boldsymbol{\omega}^\top] ^\top$ of the system and $\eta$. $\boldsymbol{\omega}$ is \textbf{w} in the figure. The figure is from the simulation in attitude1.m}
+	\caption{ The resulting $ \boldsymbol{\omega}$ , part of $x$, from the simulation.  of the system and $\eta$. $\boldsymbol{\omega}$ is \textbf{w} in the figure. The figure is from the simulation in {\color{blue}attitude1.m}}
 \label{fig:sim_attitude1_q}
 \end{figure}
 
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/1_tau.eps}
-	\caption{The resulting input $\boldsymbol{\tau}$ from the simulation in attitude1.m}
+	\caption{The resulting input $\boldsymbol{\tau}$ from the simulation in {\color{blue}attitude1.m}}
 \label{fig:sim_attitude1_tau}
 \end{figure}
 
-The control law implemented in {\color{blue} attitude1.m} implements an  controller which is proportional to the states, meaning it will try to regulate  the states to $\mathbf{0}$. The controller impacts $\boldsymbol{\omega}$ and  $\dot{\mathbf{\eta}}$ is impacted by $\boldsymbol{\omega}$, from equation \eqref{eq:x_dot}.   By looking at Figure \ref{fig:sim_attitude1_euler} - \ref{fig:sim_attitude1_tau}, the steady-state value is zero, meaning the system behaves as expected.
+The control law implemented in {\color{blue} attitude1.m} implements an  controller which is proportional to the states, meaning it will try to regulate  the states to $\mathbf{0}$. The control law implements a setpoint regulation. The controller impacts $\boldsymbol{\omega}$ and  $\dot{\mathbf{\eta}}$ is impacted by $\boldsymbol{\omega}$, from equation \eqref{eq:x_dot}.   By looking at Figure \ref{fig:sim_attitude1_euler} - \ref{fig:sim_attitude1_tau}, the steady-state value is reached after approximately 100 seconds are are zero, meaning the system behaves as expected. 
 
-\todo{Write htb in front of figures}
 
 \subsection*{Problem 1.4}
+\addcontentsline{toc}{subsection}{Problem 1.4}
 A modified attitude control law which controls $\boldsymbol{\eta}$ to a desired value $\mathbf{x}_d = [\boldsymbol{\epsilon}_d^\top \boldsymbol{0}^\top]^\top$ is:
 
 \begin{equation}
@@ -256,11 +277,12 @@ with $\bar{q} = [\eta, -\boldsymbol{\epsilon}^\top] ^\top$ and $\mathbf{S}(-\eps
 \end{equation}
 
 \subsubsection*{ Matrix expression for the quaternion error}
+\addcontentsline{toc}{subsubsection}{Matrix expression for the quaternion error}
 
 The matrix expression for the quaternion error expressed on component form is found by using the equation for quaternion error  \eqref{eq:q_tilde} and the definition of the quaternion product \eqref{eq:q_product}, and is:
 
 
-\eqref{eq:control_law_attitude3}
+
 \begin{equation}
     \begin{aligned}
     \tilde{\boldsymbol{q}}
@@ -278,6 +300,7 @@ The matrix expression for the quaternion error expressed on component form is fo
 with $\mathbf{q}_d = [\eta_d, \epsilon_{d,1}, \epsilon_{d,2}, \epsilon_{d,3}]^\top$.
 
 \subsubsection*{ Convergence of $\tilde{\mathbf{q}}$}
+\addcontentsline{toc}{subsubsection}{Convergence of $\tilde{\mathbf{q}}$}
 
 $\tilde{\mathbf{q}}$ converges means $\mathbf{q} \rightarrow \mathbf{q}_d$. Finding the $\tilde{\mathbf{q}}$ after convergence means setting $\mathbf{q} = \mathbf{q}_d$  in equation \eqref{eq:q_tilde_full} giving:
 
@@ -302,9 +325,9 @@ $\tilde{\mathbf{q}}$ converges means $\mathbf{q} \rightarrow \mathbf{q}_d$. Find
     \end{aligned}
 \end{equation}
 
-The result from equation \eqref{eq:q_con} is that the error of the quaternions will converge to zero for $\boldsymbol{\epsilon}$. The reason for $\eta$ not converging to zero, is the constraint of unit quaternions, which states $\eta \eta + \epsilon_1 \epsilon_1 + \epsilon_2 \epsilon_2 + \epsilon_3 \epsilon_3 = 0$. 
+The result from equation \eqref{eq:q_con} is that the error of the quaternions will converge to zero for $\boldsymbol{\epsilon}$. The reason for $\eta$ not converging to zero, is the constraint of unit quaternions, which states $\eta \eta + \epsilon_1 \epsilon_1 + \epsilon_2 \epsilon_2 + \epsilon_3 \epsilon_3 = 1$. 
 
-\todo{Should I say anything more ?}
+
 
 
 
