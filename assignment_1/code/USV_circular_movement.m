@@ -45,7 +45,7 @@ end
 speed = ( v_n_b(:,1).^2 + v_n_b(:,2).^2 + v_n_b(:,3).^2 ).^(1/2);
 crab_angle = asin(v_n_b(:,2)/speed) * rad2deg;
 sideslip_angle = asin(v_n_b(:,2)/speed) * rad2deg;
-course_angle = (psi + sideslip_angle) * rad2deg;
+course_angle = (psi *rad2deg) + sideslip_angle ;
 
 t = [0:h:t_end-1*h]';
 figure(figure_num)
