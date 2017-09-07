@@ -43,59 +43,54 @@ K = [   0 0 0 0 0 0;
 deg2rad = pi/180;   
 rad2deg = 180/pi;
 
-phi = 10*deg2rad;            % initial Euler angles
+% initialization
+phi = 10*deg2rad;              % initial Euler angles
 theta = -5*deg2rad;
 psi = 15*deg2rad;
 
-q = euler2q(phi,theta,psi);   % transform initial Euler angles to q
+q = euler2q(phi,theta,psi);    % transform initial Euler angles to q
 
-w = [0 0 0]';                 % initial angular rates
+w = [0 0 0]';                  % initial angular rates
 
-table = zeros(N+1,14);        % memory allocation
-desired_states = zeros(N+1,6);        % memory allocation
-
-% reference value for system
-
-
+table = zeros(N+1,14);         % memory allocation
+desired_states = zeros(N+1,6); % memory allocation
 
 %% FOR-END LOOP
 for i = 1:N+1,
-   t = (i-1)*h;                  % time
+   t = (i-1)*h;                                          % time
      
-   phi_d =10*sin(0.1*t)*deg2rad;
+   phi_d =10*sin(0.1*t)*deg2rad;                         % calculation of desired euler angles
    theta_d = 0*deg2rad;
    psi_d = 15*cos(0.05*t)*deg2rad;
-   q_d = euler2q(phi_d,theta_d,psi_d);  
+   q_d = euler2q(phi_d,theta_d,psi_d);                   % calculation of desired quaternion coordinates
    
-   q_tilde = quatmultiply(q', quatconj(q_d')); % crossproduct between multipy
-   q_tilde = q_tilde'; % MATLAB has transformed quatornians compared to book
+   q_tilde = quatmultiply(q', quatconj(q_d'))';          % error in quaternion coordinates
    
-   [J, R ,T] = eulerang(phi_d,theta_d,psi_d);
+   [J, R ,T] = eulerang(phi_d,theta_d,psi_d);            % calculating linear and angular transformation matrices
           
-   phi_d_dot = cos(0.1*t)*deg2rad;
+   phi_d_dot = cos(0.1*t)*deg2rad;                       % calculating derrivative of desired euler angles
    theta_d_dot = 0*deg2rad;
    psi_d_dot = -0.75*sin(0.05*t)*deg2rad;
    
-   w_d = inv(T) * [phi_d_dot theta_d_dot psi_d_dot]';
-   w_tilde = w - w_d;
+   w_d = inv(T) * [phi_d_dot theta_d_dot psi_d_dot]';    % calculating desired omega based on equation 2.26  from Fossen
+   w_tilde = w - w_d;                                    % calculating error in omega
    
-   u = -K*[q_tilde(2:end)' w_tilde']'; 
-   tau = u(4:end);     % u is for 6 states, tau is for 3 states
+   u = -K*[q_tilde(2:end)' w_tilde']';                   % controll law
+   tau = u(4:end);                                       % u is input for 6 states, tau is input for 3 states
 
-   [phi,theta,psi] = q2euler(q); % transform q to Euler angles
-   [J,J1,J2] = quatern(q);       % kinematic transformation matrices
+   [phi,theta,psi] = q2euler(q);                         % transform q to Euler angles
+   [J,J1,J2] = quatern(q);                               % kinematic transformation matrices
    
-   q_dot = J2*w;                        % quaternion kinematics
-   w_dot = I_inv*(Smtrx(I*w)*w + tau);  % rigid-body kinetics
+   q_dot = J2*w;                                         % quaternion kinematics
+   w_dot = I_inv*(Smtrx(I*w)*w + tau);                   % rigid-body kinetics
    
-   table(i,:) = [t q' phi theta psi w' tau'];  % store data in table
-   desired_states(i,:) = [phi_d theta_d psi_d w_d'];  % store data in table
+   table(i,:) = [t q' phi theta psi w' tau'];            % store data in table
+   desired_states(i,:) = [phi_d theta_d psi_d w_d'];     % store desired states in table
    
-   
-   q = q + h*q_dot;	             % Euler integration
+   q = q + h*q_dot;	                                     % Euler integration
    w = w + h*w_dot;
    
-   q  = q/norm(q);               % unit quaternion normalization
+   q  = q/norm(q);                                       % unit quaternion normalization
    
 end 
 

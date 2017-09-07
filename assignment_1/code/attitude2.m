@@ -20,13 +20,13 @@
 % Author:                   2016-05-30 Thor I. Fossen 
 
 %% USER INPUTS
-h = 0.1;                     % sample time (s)
-N  = 2000;                    % number of samples
+h = 0.1;                               % sample time (s)
+N  = 2000;                             % number of samples
 
 % model parameters
 m = 100;
 r = 2.0;
-I = diag([m*r^2 m*r^2 m*r^2]);       % inertia matrix
+I = diag([m*r^2 m*r^2 m*r^2]);         % inertia matrix
 I_inv = inv(I);
 
 %controll parameters
@@ -43,45 +43,42 @@ K = [   0 0 0 0 0 0;
 deg2rad = pi/180;   
 rad2deg = 180/pi;
 
-phi = 10*deg2rad;            % initial Euler angles
+% initialization
+phi = 10*deg2rad;                  % initial Euler angles
 theta = -5*deg2rad;
 psi = 15*deg2rad;
 
-q = euler2q(phi,theta,psi);   % transform initial Euler angles to q
+q = euler2q(phi,theta,psi);        % transform initial Euler angles to q
 
-w = [0 0 0]';                 % initial angular rates
+w = [0 0 0]';                      % initial angular rates
 
-table = zeros(N+1,14);        % memory allocation
-tracking_error = zeros(N+1,3);        % memory allocation
-
-% reference value for system
-
-
+table = zeros(N+1,14);             % memory allocation
+tracking_error = zeros(N+1,3);     % memory allocation
 
 %% FOR-END LOOP
 for i = 1:N+1,
-   t = (i-1)*h;                  % time      
+   t = (i-1)*h;                           % time      
    
-   phi_d =10*sin(0.1*t)*deg2rad;
+   phi_d =10*sin(0.1*t)*deg2rad;          % calculate desired values in euler angles
    theta_d = 0*deg2rad;
    psi_d = 15*cos(0.05*t)*deg2rad;
-   q_d = euler2q(phi_d,theta_d,psi_d);  
+   
+   q_d = euler2q(phi_d,theta_d,psi_d);    % calculate desired values in quaternions
    
    q_d_conj = quatconj(q_d');
-   q_tilde = quatmultiply(q', q_d_conj); % crossproduct between multipy
-   q_tilde = q_tilde'; % MATLAB has transformed quatornians compared to book
+   q_tilde = quatmultiply(q', q_d_conj)'; % calculate error in quaternion coordinates
    
-   u = -K*[q_tilde(2:end)' w']'; 
-   tau = u(4:end);     % u is for 6 states, tau is for 3 states
+   u = -K*[q_tilde(2:end)' w']';          % control law
+   tau = u(4:end);                        % u is input for 6 states, tau is input for 3 states
 
-   [phi,theta,psi] = q2euler(q); % transform q to Euler angles
-   [J,J1,J2] = quatern(q);       % kinematic transformation matrices
+   [phi,theta,psi] = q2euler(q);          % transform q to Euler angles
+   [J,J1,J2] = quatern(q);                % kinematic transformation matrices
    
-   q_dot = J2*w;                        % quaternion kinematics
-   w_dot = I_inv*(Smtrx(I*w)*w + tau);  % rigid-body kinetics
+   q_dot = J2*w;                          % quaternion kinematics
+   w_dot = I_inv*(Smtrx(I*w)*w + tau);    % rigid-body kinetics
    
-   table(i,:) = [t q' phi theta psi w' tau'];  % store data in table
-   desired_euler_angles(i,:) = [phi_d theta_d psi_d];  % store data in table
+   table(i,:) = [t q' phi theta psi w' tau'];           % store data in table
+   desired_euler_angles(i,:) = [phi_d theta_d psi_d];   % store desired values in table
    
    q = q + h*q_dot;	             % Euler integration
    w = w + h*w_dot;

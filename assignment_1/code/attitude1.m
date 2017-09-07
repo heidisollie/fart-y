@@ -20,13 +20,13 @@
 % Author:                   2016-05-30 Thor I. Fossen 
 
 %% USER INPUTS
-h = 0.1;                     % sample time (s)
-N  = 2000;                    % number of samples
+h = 0.1;                                    % sample time (s)
+N  = 2000;                                  % number of samples
 
 % model parameters
-m = 100;
+m = 100;                                    
 r = 2.0;
-I = diag([m*r^2 m*r^2 m*r^2]);       % inertia matrix
+I = diag([m*r^2 m*r^2 m*r^2]);              % inertia matrix
 I_inv = inv(I);
 
 %controll parameters
@@ -43,6 +43,7 @@ K = [   0 0 0 0 0 0;
 deg2rad = pi/180;   
 rad2deg = 180/pi;
 
+% initialization
 phi = 10*deg2rad;            % initial Euler angles
 theta = -5*deg2rad;
 psi = 15*deg2rad;
@@ -57,7 +58,7 @@ table = zeros(N+1,14);        % memory allocation
 for i = 1:N+1,
    t = (i-1)*h;                  % time
    u = -K*[q(2:end)' w']';       % control law
-   tau = u(4:end);               % u is for 6 states, tau is fore 3 states
+   tau = u(4:end);               % u is for input 6 states, tau is input for 3 states
 
    [phi,theta,psi] = q2euler(q); % transform q to Euler angles
    [J,J1,J2] = quatern(q);       % kinematic transformation matrices
@@ -88,7 +89,6 @@ subplot(311),plot(t,phi),xlabel('time (s)'),ylabel('deg'),title('\phi'),grid
 subplot(312),plot(t,theta),xlabel('time (s)'),ylabel('deg'),title('\theta'),grid
 subplot(313),plot(t,psi),xlabel('time (s)'),ylabel('deg'),title('\psi'),grid
 figure(3)
-%subplot(211),plot(t,q),xlabel('time (s)'),ylabel('rad'),title('q'),grid, legend('\eta', '\epsilon_1', '\epsilon_2', '\epsilon_3')
 subplot(111),plot(t,w),xlabel('time (s)'),ylabel('deg/s'),title('w'),grid, legend('w_1', 'w_2', 'w_3')
 figure(2)
 subplot(111),plot(t,tau),xlabel('time (s)'),ylabel('Nm'),title('\tau'),grid, legend('\tau_1', '\tau_2', '\tau_3')
