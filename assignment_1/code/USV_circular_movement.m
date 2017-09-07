@@ -2,6 +2,7 @@
 phi = 0 *deg2rad;
 theta = 2.0 *deg2rad;
 psi = 30 * deg2rad;
+
 U_c = 0.6; % m/s
 alpha_c = 10 * deg2rad;
 beta_c = 45 * deg2rad;
@@ -26,13 +27,16 @@ N = t_end/h;
 U = 1.5;
 w = 0.859 * deg2rad ;
 
-v = zeros(N, 3); % velocities 
-s = zeros(N, 3); % posisjon
+v_n_b = zeros(N, 3); % velocities of body  realtive to ned in body coordinates
+p_n_b = zeros(N, 3); % position of body realative to ned in ned coordinates
 
+[J,R_nb,T] = eulerang(phi,theta,psi);
 
 for i = 0:N-1;
     t = i*h;
-    v(i+1,:) = [U*cos(w*t) U*sin(w*t) 0];
+    v_b_b = [U*cos(w*t) U*sin(w*t) 0];
+    
+    v_n_b(i+1,1) = R_nb * v_b_b
     if i == 0
         s(i+1,1) = 0;
         s(i+1,2) = 0;
@@ -43,9 +47,9 @@ for i = 0:N-1;
         s(i+1,3) = s(i,3) + v(i,3)*h;
     end
 end
-speed = ( v(:,1).^2 + v(:,2).^2 + v(:,3).^2 ).^(1/2);
-crab_angle = arcsin(v(:,2)/speed);
-sideslip_angle = arcsin(v(:,2)/speed);
+speed = ( v_n_b(:,1).^2 + v_n_b(:,2).^2 + v_n_b(:,3).^2 ).^(1/2);
+crab_angle = arcsin(v_n_b(:,2)/speed);
+sideslip_angle = arcsin(v_n_b(:,2)/speed);
 course_angle = yaw + sideslip_angle;
 
 t = [0:h:t_end-1*h]';
@@ -58,14 +62,14 @@ plot(s(:,1), s(:,2)); title('Plot of vechicle position without current');
 
 figure_num = figure_num + 1;
 figure(figure_num)
-subplot(211); plot(t, v);title('Relative velocities'); legend('u','v','w');
+subplot(211); plot(t, v_n_b);title('Relative velocities'); legend('u','v','w');
 subplot(212); plot(t,speed);title('Speed');
 
 figure_num = figure_num + 1;
 figure(figure_num)
-subplot(311); plot(t, crab_angle);title('Crab_angle'); legend('u','v','w');
-subplot(312); plot(t,sideslip_angle);title('Sideslip angle');
-subplot(312); plot(t,course_angle);title('Course angle');
+subplot(311); plot(t, crab_angle);title('crab_angle'); legend('\beta', '\beta_r','\khi');
+subplot(312); plot(t,sideslip_angle);title('sideslip angle');
+subplot(312); plot(t,course_angle);title('course angle');
 
 
 
