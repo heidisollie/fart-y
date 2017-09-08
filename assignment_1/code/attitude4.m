@@ -1,3 +1,19 @@
+function temp = atan2(y,x)
+    if(x > 0)
+        temp = atan(y./x);
+    elseif(y>=0 and x<0)
+        temp =pi/2 + atan(y./x);
+    elseif(y<0 and x<0)
+        temp = -pi/2 + atan(y./x);
+    elseif(x == 0 and y > 0)
+        temp =  pi/2;
+   elseif(x == 0 and y < 0)
+        temp =  -pi/2;
+    elseif(x == 0 and y == 0)
+        temp = -1000; % wrong
+    end
+end
+
 %% Task 2.3
 close all;
 % some constants
@@ -63,12 +79,6 @@ s_n_b_c(1,:) = [0, 0, 0];                    % position of body realative to ned
 for i = 1:N-1;
     t = i*h;
 
-    if(t < 700)
-        rudder(i,1) = 5*deg2rad*K_r*(1-exp(t/T_r));
-    else
-        rudder(i,1) = 5*deg2rad*K_r*(1-exp(-t/T_r)) + 5*deg2rad*K_r*(1-exp(-(t-700)/T_r));
-    end 
-    
     w_b_b = [p; q; rudder(i)];
     
     [J,R,T] = eulerang(Theta(i,1),Theta(i,2),Theta(i,3));
@@ -77,20 +87,34 @@ for i = 1:N-1;
     v_b_b = [U*cos(rudder(i)*t); U*sin(rudder(i)*t); 0];                % omega = r = yaw_rate
     v_b_b_c = v_b_b - v_b_c;      % omega = r = yaw_rate
     
+    %preper for next iteration
+    
     v_n_b(i+1,:) = (R * v_b_b)'; 
     v_n_b_c(i+1,:) = (R * v_b_b_c)'; 
+    
     Theta_dot = (T * w_b_b);
     
     Theta(i+1,1:2) = Theta(i,1:2) + Theta_dot(1:2)'*h;
     Theta(i+1,3) = rudder(i);
+    
     s_n_b(i+1,:) = s_n_b(i,:) + v_n_b(i,:)*h;
     s_n_b_c(i+1,:) = s_n_b_c(i,:) + v_n_b_c(i,:)*h;
     
-    p_dot = -2*zeta_p*omega_p - omega_p^2*Theta(i+1,1);
-    q_dot = -2*zeta_q*omega_q - omega_q^2*Theta(i+1,2);
+    p_dot = -2*zeta_p*omega_p*p - omega_p^2*Theta(i,1);
+    q_dot = -2*zeta_q*omega_q*q - omega_q^2*Theta(i,2);
     
-    p = p + p_dot*h;
+    
+    p = p + p_dot*h; 
     q = q + q_dot*h;
+    
+    if(t < 699)
+        delta = 5*deg2rad;
+    else
+        delta = 10*deg2rad;
+    end 
+    
+    rudder_dot= -(rudder(i)/T_r) + K_r/T_r*delta;
+    rudder(i+1) = rudder(i) + rudder_dot*h;
       
 end
 
@@ -99,6 +123,7 @@ end
 speed = ( v_n_b(:,1).^2 + v_n_b(:,2).^2 + v_n_b(:,3).^2 ).^(1/2);
 speed_c = ( v_n_b_c(:,1).^2 + v_n_b_c(:,2).^2 + v_n_b_c(:,3).^2 ).^(1/2);
 crab_angle = asin(v_n_b(:,2)./speed) .* rad2deg;
+sideslip_angle = asin(v_n_b_c(:,2)./speed_c) .* rad2deg;
 course_angle = (Theta(:,3)*rad2deg) + crab_angle ;
 
 t = [0:h:t_end-1*h]';
