@@ -1,5 +1,6 @@
 %% Task 2.3
 close all;
+clc;
 % some constants
 deg2rad = pi/180;   
 rad2deg = 180/pi;
@@ -39,6 +40,10 @@ p_n_b_c = zeros(N, 3);                  % position of body with current realativ
 v_n_b_n =zeros(N, 3); 
 p_n_current = zeros(N,3);
 
+crab_angle = zeros(N,1);
+sideslip_angle = zeros(N,1);
+
+
 %[J,R_nb,T] = eulerang(phi,theta,psi);
 
 for i = 0:N-1;
@@ -52,13 +57,12 @@ for i = 0:N-1;
     v_b_b_relative = [U*cos(w*t); U*sin(w*t); 0] - v_b_c; % velocity in body realtive to body in current
     v_n_b_relative(i+1,:) = (R_n_b * v_b_b_relative)';
     
-    
     %relative to ocean
     v_b_b_c =  [U*cos(w*t); U*sin(w*t); 0]; % velcoity of body in body relativ to current
     v_n_b_c = R_n_b* v_b_b_c; % velocity of body in ned realtive to current
     
     % realtive to ocean with current
-    v_n_c_n = R*v_b_c; % velcoity of current in ned realtive to ned
+    v_n_c_n = R_n_b*v_b_c; % velcoity of current in ned realtive to ned
     v_n_b_n(i+1,:) = (v_n_b_c + v_n_c_n)'; % velcity of body in ned realtive to ned
     
     if i == 0
@@ -76,13 +80,10 @@ end
 % plotting without current
 
 speed = ( v_n_b(:,1).^2 + v_n_b(:,2).^2 + v_n_b(:,3).^2 ).^(1/2);
-for i = 0:N-1:
-    crab_angle = atan(v_n_b(:,2)./v_n_b(:,1)) .* rad2deg;
-    sideslip_angle = atan2(v_n_b(i,2)./v_n_b(i,1)) .* rad2deg;
+for i = 1:N
+    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg;
+    sideslip_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg;
 end
-crab_angle = atan(v_n_b(:,2)./v_n_b(:,1)) .* rad2deg;
-sideslip_angle = atan(v_n_b(:,2)./v_n_b(:,1)) .* rad2deg;
-
 course_angle = (psi*rad2deg).*ones(N,1) + crab_angle ;
 
 t = [0:h:t_end-1*h]';
@@ -108,8 +109,10 @@ plot(t,course_angle);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel(
 
 % plots with current
 speed_relative = ( v_n_b_relative(:,1).^2 + v_n_b_relative(:,2).^2 + v_n_b_relative(:,3).^2 ).^(1/2);
-crab_angle = atan2(v_n_b(:,2)./v_n_b(:,1)) .* rad2deg;
-sideslip_angle = atan2(v_n_b_relative(:,2)./v_n_b_relative(:,1)) .* rad2deg;
+for i = 1:N
+    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg;
+    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg;
+end
 course_angle = (psi*rad2deg).*ones(N,1) + crab_angle;
 
 figure_num = figure_num + 1;

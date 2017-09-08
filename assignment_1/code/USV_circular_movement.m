@@ -57,7 +57,6 @@ for i = 0:N-1;
     v_b_b_relative = [U*cos(w*t); U*sin(w*t); 0] - v_b_c; % velocity in body realtive to body in current
     v_n_b_relative(i+1,:) = (R_n_b * v_b_b_relative)';
     
-    
     %relative to ocean
     v_b_b_c =  [U*cos(w*t); U*sin(w*t); 0]; % velcoity of body in body relativ to current
     v_n_b_c = R_n_b* v_b_b_c; % velocity of body in ned realtive to current
