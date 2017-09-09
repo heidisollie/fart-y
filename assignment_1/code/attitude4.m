@@ -39,7 +39,7 @@ v_n_c_n = [U_c*cos(alpha_c)*cos(beta_c);
 %% Task 2.4   Simulation and plotting
 
 % Without current
-t_end = 3000;
+t_end = 1500;
 h = 0.1;
 N = t_end/h;
 U = 1.5;
@@ -57,7 +57,7 @@ sideslip_angle = zeros(N,1);
 Theta = zeros(N, 3);                     % Euler angles 
 r = zeros(N, 1);                    % Euler angles 
 
-t_shift_rudder = 1000;
+t_shift_rudder = 700;
 
 p = p_0;
 q = q_0;
@@ -116,10 +116,11 @@ end
 speed = ( v_n_b_c(:,1).^2 + v_n_b_c(:,2).^2 + v_n_b_c(:,3).^2 ).^(1/2);
 speed_relative = ( v_n_b_relative(:,1).^2 + v_n_b_relative(:,2).^2 + v_n_b_relative(:,3).^2 ).^(1/2);
 for i = 1:N
-    crab_angle(i) = atan2(v_n_b_c(i,2),v_n_b_c(i,1)) .* rad2deg;
-    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg;
+    crab_angle(i) = atan2(v_n_b_c(i,2),v_n_b_c(i,1)) .* rad2deg + 180 ;
+    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg + 180;
+    course_angle = mod((Theta(:,3)*rad2deg) + crab_angle,360);
 end
-course_angle = (Theta(:,3)*rad2deg) + crab_angle ;
+
 
 
 t = [0:h:t_end-1*h]';
@@ -139,7 +140,7 @@ subplot(212), plot(t,speed_relative), xlabel('s'), ylabel('m/s'), title('Speed')
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
 subplot(211), plot(t, r*rad2deg), xlabel('s'), ylabel(''),title('rudder');
-subplot(212), plot(t, v_n_b_n), xlabel('s'), ylabel('m/s'),title('realtive to ned'); legend('u','v','w');
+subplot(212), plot(t, cos(t.*r)), xlabel('s'), ylabel('m/s'),title('cos(t*r)'); legend('u','v','w');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
