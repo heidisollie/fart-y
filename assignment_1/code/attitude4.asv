@@ -70,10 +70,15 @@ for i = 1:N-1
     
     [J,R_n_b,T] = eulerang(Theta(i,1),Theta(i,2),Theta(i,3));
     
-    w_b_b_n(i,:) = [p q r(i)]';
+    w_n_b_n = [p q r(i)];
+    w_b_b_n(i,:) = R*w_n_b_n
     Theta_dot = (T * w_b_b_n(i,:)');
     
     v_b_c_n = R_n_b'*v_n_c_n;
+    
+%     %without current
+%     v_b_b = [U*cos(rudder(i)*t); U*sin(rudder(i)*t); 0];
+%     v_n_b(i+1,:) = (R * v_b_b)';
     
     % relative velocity
     v_b_b_relative = [U*cos(r(i)*t); U*sin(r(i)*t); 0] - v_b_c_n; % velocity in body realtive to body in current
@@ -106,8 +111,8 @@ for i = 1:N-1
     r_dot = -(r(i)/T_n) + (K_n/T_n)*delta;
     r(i+1) = r(i) + r_dot*h;
     
-    Theta(i+1,:) = Theta(i,:) + Theta_dot(:)'*h;
-    Theta(i+1,3) = mod((r(i)*h + Theta(i,3)),2*pi);
+    Theta(i+1,1:2) = Theta(i,1:2) + Theta_dot(1:2)'*h;
+    Theta(i+1,3) = r(i+1);
     
 end
 
@@ -149,7 +154,7 @@ plot(t,course_angle);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel(
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
-plot(t,Theta*rad2deg);title('Roll, pitch , yaw'); xlabel('t'); ylabel('deg'); legend('\phi', '\theta','\psi');
+plot(t,Theta);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
