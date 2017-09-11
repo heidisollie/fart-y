@@ -81,16 +81,16 @@ end
 
 speed = ( v_n_b(:,1).^2 + v_n_b(:,2).^2 + v_n_b(:,3).^2 ).^(1/2);
 for i = 1:N
-    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg;
-    sideslip_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg;
+    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg + 180;
+    sideslip_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg + 180;
+    course_angle = mod((psi*rad2deg).*ones(N,1) + crab_angle,360);
 end
-course_angle = (psi*rad2deg).*ones(N,1) + crab_angle ;
 
 t = [0:h:t_end-1*h]';
-figure_num = 1;
+figure_num = 0;
 
-figure(figure_num)
-plot(t, p_n_b); xlabel('s'),ylabel('m'), title('Distance from initial point');legend('x','y','z');
+%figure(figure_num)
+%plot(t, p_n_b); xlabel('s'),ylabel('m'), title('Distance from initial point');legend('x','y','z');
 
 figure_num = figure_num + 1;
 figure(figure_num)
@@ -110,14 +110,14 @@ plot(t,course_angle);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel(
 % plots with current
 speed_relative = ( v_n_b_relative(:,1).^2 + v_n_b_relative(:,2).^2 + v_n_b_relative(:,3).^2 ).^(1/2);
 for i = 1:N
-    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg;
-    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg;
+    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg + 180;
+    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg +180;
+    course_angle = mod((psi*rad2deg).*ones(N,1) + crab_angle,360);
 end
-course_angle = (psi*rad2deg).*ones(N,1) + crab_angle;
 
-figure_num = figure_num + 1;
-figure(figure_num)
-plot(t, p_n_b_c); xlabel('s'),ylabel('m'), title('Distance from initial point with current');legend('x','y','z');
+%figure_num = figure_num + 1;
+%figure(figure_num)
+%plot(t, p_n_b_c); xlabel('s'),ylabel('m'), title('Distance from initial point with current');legend('x','y','z');
 
 figure_num = figure_num + 1;
 figure(figure_num)
