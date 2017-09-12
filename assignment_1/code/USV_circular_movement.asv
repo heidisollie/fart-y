@@ -93,8 +93,8 @@ figure_num = 0;
 %plot(t, p_n_b); xlabel('s'),ylabel('m'), title('Distance from initial point');legend('x','y','z');
 
 figure_num = figure_num + 1;
-figure(figure_num); 
-plot(p_n_b(:,2), p_n_b(:,1)), xlabel('east [m]'),ylabel('north [m]'), title('Plot of vehicle position'), grid; axis equal;
+figure(figure_num)axis tight equal;
+plot(p_n_b(:,2), p_n_b(:,1)), xlabel('east [m]'),ylabel('north [m]'), title('Plot of vehicle position'), grid;
 
 figure_num = figure_num + 1;
 figure(figure_num)

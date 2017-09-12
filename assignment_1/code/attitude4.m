@@ -107,7 +107,7 @@ for i = 1:N-1
     r(i+1) = r(i) + r_dot*h;
     
     Theta(i+1,:) = Theta(i,:) + Theta_dot(:)'*h;
-    Theta(i+1,3) = mod(Theta(i,3),2*pi);
+    Theta(i+1,3) = mod(Theta(i+1,3),2*pi);
     
 end
 
