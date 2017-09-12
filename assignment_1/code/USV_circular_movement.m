@@ -42,6 +42,7 @@ p_n_current = zeros(N,3);
 
 crab_angle = zeros(N,1);
 sideslip_angle = zeros(N,1);
+course_angle = zeros(N,1);
 
 
 %[J,R_nb,T] = eulerang(phi,theta,psi);
@@ -75,17 +76,14 @@ for i = 0:N-1;
         p_n_current(i+1,:) = p_n_current(i,:) + (v_n_c*h)';
     end
     
+    crab_angle(i+1) = atan2(v_b_b(2),v_b_b(1)) + pi;
+    sideslip_angle(i+1) = atan2(v_b_b_relative(2),v_b_b_relative(1)) + pi;
+    course_angle(i+1) = mod((psi + crab_angle(i+1)),2*pi); 
 end
 
 % plotting without current
 
 speed = ( v_n_b(:,1).^2 + v_n_b(:,2).^2 + v_n_b(:,3).^2 ).^(1/2);
-for i = 1:N
-    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg + 180;
-    sideslip_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg + 180;
-    course_angle = mod((psi*rad2deg).*ones(N,1) + crab_angle,360);
-end
-
 t = [0:h:t_end-1*h]';
 figure_num = 0;
 
@@ -103,17 +101,12 @@ subplot(212), plot(t,speed), xlabel('s'), ylabel('m/s'), title('Speed');
 
 figure_num = figure_num + 1;
 figure(figure_num)
-plot(t, crab_angle), hold on; 
-plot(t,sideslip_angle)
-plot(t,course_angle);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
+plot(t, crab_angle*rad2deg), hold on; 
+plot(t,crab_angle*rad2deg)
+plot(t,course_angle*rad2deg);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
 
 % plots with current
 speed_relative = ( v_n_b_relative(:,1).^2 + v_n_b_relative(:,2).^2 + v_n_b_relative(:,3).^2 ).^(1/2);
-for i = 1:N
-    crab_angle(i) = atan2(v_n_b(i,2),v_n_b(i,1)) .* rad2deg + 180;
-    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg +180;
-    course_angle = mod((psi*rad2deg).*ones(N,1) + crab_angle,360);
-end
 
 %figure_num = figure_num + 1;
 %figure(figure_num)
@@ -131,8 +124,8 @@ subplot(212), plot(t,speed_relative), xlabel('s'), ylabel('m/s'), title('Speed')
 
 figure_num = figure_num + 1;
 figure(figure_num)
-plot(t, crab_angle), hold on
-plot(t,sideslip_angle), hold on
-plot(t,course_angle), hold on
+plot(t, crab_angle*rad2deg), hold on; 
+plot(t,sideslip_angle*rad2deg)
+plot(t,course_angle*rad2deg)
 title('Crab-, slip- and courseangle with current'), xlabel('t'), ylabel('deg'), legend('\beta', '\beta_r','\chi');
 
