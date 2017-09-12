@@ -1,0 +1,71 @@
+\section*{Problem 2 - Underwater Vehicles}
+\addcontentsline{toc}{section}{Problem 2 - Underwater Vehicles }
+For part 2 of this assignment the focus shifted from the satellite in space to an Underwater Vehicle. For the entirety of this part the vehicle moves at a constant depth $z=10m$ at a speed of $U=1.5m/s$ and a pitch angle of $\theta = 2.0^\circ$ and a roll angle of $\phi = 0^\circ$. While moving on a straight line the course angel was given $\chi = 30^\circ$.
+\subsection*{Problem 2.1}
+\addcontentsline{toc}{subsection}{Problem 2.1}
+The crab angle is given by the equation:
+\begin{equation}
+    \beta = \chi - \psi
+\end{equation}
+
+Assuming there no currents and $\beta = 0$, the resulting heading is $\psi = \chi = 30^\circ$.
+
+Another formulation for the crab angle is
+
+\begin{equation}
+    \beta = sin^{-1}(\frac{v}{U})
+\end{equation}
+
+Using this, the known value of U and the fact that $\beta$ is still assumed to be zero we can calculate v, resulting in $v=0$
+
+When it comes to the rest of the entries of the velocity vector one could choose to calculate them using basic trigonometry, using the angle between the velocity vector and the x-axis of the body frame to calculate its u and w parts. Alternatively one could choose to use the equations for rotating from flow coordinates to body coordinates from the course book \cite{Fossen2011}. 
+
+\begin{equation}
+    \begin{align}
+        
+    \end{align}
+\end{equation}
+
+For both methods $\beta$ is noted to be zero and they both means recognizing the remaining angle in question, the angle of attack, as the negative $\theta$. 
+
+\subsection*{Problem 2.2}
+\addcontentsline{toc}{subsection}{Problem 2.2}
+Answer Problem 2.2 here. The body-fixed velocities can be written as
+\begin{equation}
+\label{eq:velocity}
+	\begin{bmatrix}
+		u \\
+		v \\
+		w
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		U \cos( \omega t)\\
+		U \sin(\omega t)\\
+		0	
+	\end{bmatrix}
+\end{equation}
+
+\subsection*{Problem 2.3}
+\addcontentsline{toc}{subsection}{Problem 2.3}
+
+Answer Problem 2.3 here.
+
+EQUATIONS ELLA NEED ;)
+\begin{equation}
+    \begin{aligned}
+    \mathbf{v}_c^n 
+    =
+    \begin{bmatrix}
+    U_c \cos(\alpha_c) \cos(\beta_c) \\
+    U_c \sin(\beta_c) \\
+    U_c \sin(\alpha_c) \cos(\beta_c)\\
+    \end{bmatrix}
+    \label{eq:v_n_c}
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \boldsymbol{v}_r = \boldsymbol{v} - \boldsymbol{v}_c
+    \label{eq_v_r}
+\end{equation}

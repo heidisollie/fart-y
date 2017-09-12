@@ -56,6 +56,7 @@ crab_angle = zeros(N,1);
 sideslip_angle = zeros(N,1);
 Theta = zeros(N, 3);                     % Euler angles 
 r = zeros(N, 1);                    % Euler angles 
+course_angle = zeros(N, 1);
 
 t_shift_rudder = 700;
 
@@ -107,21 +108,17 @@ for i = 1:N-1
     r(i+1) = r(i) + r_dot*h;
     
     Theta(i+1,:) = Theta(i,:) + Theta_dot(:)'*h;
-    Theta(i+1,3) = mod(Theta(i,3),2*pi);
+    Theta(i+1,3) = mod(Theta(i+1,3),2*pi);
     
+    crab_angle(i) = atan2(v_b_b_c(2),v_b_b_c(1)) + pi;
+    sideslip_angle(i) = atan2(v_b_b_relative(2),v_b_b_relative(1)) + pi;
+    course_angle(i) = mod((Theta(i,3) + crab_angle(i)),2*pi); 
 end
 
 % plotting without current
 
 speed = ( v_n_b_c(:,1).^2 + v_n_b_c(:,2).^2 + v_n_b_c(:,3).^2 ).^(1/2);
 speed_relative = ( v_n_b_relative(:,1).^2 + v_n_b_relative(:,2).^2 + v_n_b_relative(:,3).^2 ).^(1/2);
-for i = 1:N
-    crab_angle(i) = atan2(v_n_b_c(i,2),v_n_b_c(i,1)) .* rad2deg + 180 ;
-    sideslip_angle(i) = atan2(v_n_b_relative(i,2),v_n_b_relative(i,1)) .* rad2deg + 180;
-    course_angle = mod((Theta(:,3)*rad2deg) + crab_angle,360);
-end
-
-
 
 t = [0:h:t_end-1*h]';
 figure_num = 0;
@@ -144,9 +141,9 @@ subplot(212), plot(t, cos(t.*r)), xlabel('s'), ylabel('m/s'),title('cos(t*r)'); 
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
-plot(t, crab_angle), hold on; 
-plot(t,sideslip_angle)
-plot(t,course_angle);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
+plot(t, crab_angle*rad2deg), hold on; 
+plot(t,sideslip_angle*rad2deg)
+plot(t,course_angle*rad2deg);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
