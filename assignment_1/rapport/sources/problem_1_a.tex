@@ -12,14 +12,14 @@ The objective of problem 1 is to control attitude of a satellite. The satellites
 	\end{align}	
 \end{subequations}
 
-These equations uses the unit quaternions and Euler angles. The unit  quaternions are represented as $q = [\eta, \epsilon_1, \epsilon_2, \epsilon_3]^\top$ and only the positive $\eta$ is used, leading to equations \eqref{eq:pos_eta}. The Euler angles are represented as $\Theta = [\phi , \theta , \psi]^\top$ and their representative angular velocities are  $\omega = [\omega_1, \omega_2, \omega_3]$. In \cite{Fossen2011} $\omega$ is often written as $\omega = [p,q,r]$, but because of the parameter $r = 2.0m$, in this rapport $\omega$ is written as $[\omega_1, \omega_2, \omega_3]^\top$.
+These equations uses the unit quaternions and Euler angles. The unit  quaternions are represented as $q = [\eta, \epsilon_1, \epsilon_2, \epsilon_3]^\top$ and only the positive $\eta$ is used, leading to equations \eqref{eq:pos_eta}. The Euler angles are represented as $\boldsymbol{\Theta} = [\phi , \theta , \psi]^\top$ and their representative angular velocities are  $\boldsymbol{\omega} = [\omega_1, \omega_2, \omega_3]$. In \cite{Fossen2011} $\boldsymbol{\omega}$ is often written as $\boldsymbol{\omega} = [p,q,r]$, but because of the parameter $r = 2.0m$, in this rapport $\boldsymbol{\omega}$ is written as $[\omega_1, \omega_2, \omega_3]^\top$.
 
 \begin{equation}
-    \eta = \sqrt{1 - \epsilon^\top \epsilon} 
+    \eta = \sqrt{1 - \boldsymbol{\epsilon}^\top \boldsymbol{\epsilon}} 
     \label{eq:pos_eta}
 \end{equation}
  
-In this lab report the state of the system $x = [ \boldsymbol{\epsilon}^\top, \boldsymbol{\omega}^\top]$ and the input to the system $\mathbf{u} = \boldsymbol[0,0,0,\tau_1, \tau_2, \tau_3]^\top$. The reason for the upper three zeros in the input, is because of $\dot{\boldsymbol{\epsilon}}$ do not have any input, while $\dot{\boldsymbol{\omega}}$ have input $\boldsymbol{\tau}$.
+In this lab report the state of the system $\boldsymbol{x} = [ \boldsymbol{\epsilon}^\top, \boldsymbol{\omega}^\top]$ and the input to the system $\mathbf{u} = \boldsymbol[0,0,0,\tau_1, \tau_2, \tau_3]^\top$. The reason for the upper three zeros in the input, is because of $\dot{\boldsymbol{\epsilon}}$ do not have any input, while $\dot{\boldsymbol{\omega}}$ have input $\boldsymbol{\tau}$.
 
 \subsection*{Problem 1.1}
 \addcontentsline{toc}{subsection}{Problem 1.1}
@@ -27,7 +27,7 @@ In this lab report the state of the system $x = [ \boldsymbol{\epsilon}^\top, \b
 \subsubsection*{Finding the equilibrium point}
 \addcontentsline{toc}{subsubsection}{Finding the equilibrium point}
 
-The equilibrium point is defined as the steady-state solution of a system, meaning $\dot{\mathbf{x}} = 0$ and $\mathbf{u}= \mathbf{0}$. \todo{Enig Alexandra ? }
+The equilibrium point is defined as the steady-state solution of a system, meaning $\dot{\mathbf{x}} = 0$ and $\mathbf{u}= \mathbf{0}$. 
 
 The equilibrium point $\mathbf{x_0}$ of the closed-loop system $\mathbf{x} = [ \boldsymbol{\epsilon}^\top, \boldsymbol{\omega}^\top]^\top$ corresponding to $\mathbf{q} = [\eta,\epsilon_1, \epsilon_2, \epsilon_3]^\top = [1, 0, 0, 0]$ and $\boldsymbol{\tau} = \boldsymbol{0}$ may be found by setting $\dot{\boldsymbol{\epsilon}} = \mathbf{0}$ and $\dot{\boldsymbol{\omega}} = \mathbf{0}$. The equation for $\boldsymbol{\epsilon}$ and $\boldsymbol{\omega}$ may be found by using equation (2.86) in \cite{Fossen2011} and \eqref{eq:EOM_omega_dot}. From equation (2.86) in \cite{Fossen2011} and \eqref{eq:EOM_omega_dot} the following equations were found:
 
@@ -83,8 +83,8 @@ A system of the form $\dot{\mathbf{x}} = f(\mathbf{x , u})$, may be linearized b
 
 \begin{equation}
     \begin{aligned}
-        \mathbf{A}&= \frac{\partial f(\mathbf{x,\boldsymbol{\tau}})}{\partial \mathbf{x}}\Bigr|_{\substack{\mathbf{x}= \mathbf{x}_0 \\ \boldsymbol{\tau=0 }}} &
-        \mathbf{B}&= \frac{\partial f(\mathbf{x,\boldsymbol{\tau}})}{\partial \mathbf{u}}\Bigr|_{\substack{\mathbf{x}= \mathbf{x}_0 \\ \boldsymbol{\tau=0 }}} 
+        \mathbf{A}&= \frac{\partial f(\mathbf{x,\boldsymbol{u}})}{\partial \mathbf{x}}\Bigr|_{\substack{\mathbf{x}= \mathbf{x}_0 \\ \boldsymbol{u} =\mathbf{0}}} &
+        \mathbf{B}&= \frac{\partial f(\mathbf{x,\boldsymbol{u}})}{\partial \mathbf{u}}\Bigr|_{\substack{\mathbf{x}= \mathbf{x}_0 \\ \boldsymbol{u} =\mathbf{0}}} 
     \end{aligned}
     \label{eq:Jocobians}
 \end{equation}
@@ -201,7 +201,7 @@ When choosing poles, the most important thing is to look into the dynamics of th
 
 Generally since the satellite is in space, it should not have too heavy oscillations because of less interrupting (and stabilizing) forces and being in vacuum. At the same time, adjusting real poles to give as fast response as complex-poles, will imply more power needed. A satellite will have limited thruster capacity, which may lead to saturation on the input to the controller.
 
-Since the satellite should be relatively fast, with limited thrust power, it is suggested to have imaginary poles, with small imaginary parts /oscillatory parts. This suggestion will lead to a slightly faster positioning response of the satellite, and at the same time save some thrust power but at the expense of somewhat reduced stability.   
+Since the satellite should be relatively fast, with limited thrust power, it is suggested to have complex poles, with small imaginary parts /oscillatory parts. This suggestion will lead to a slightly faster positioning response of the satellite, and at the same time save some thrust power but at the expense of somewhat reduced stability.   
 
 \subsection*{Problem 1.3}
 \addcontentsline{toc}{subsection}{Problem 1.3}
@@ -209,39 +209,39 @@ Since the satellite should be relatively fast, with limited thrust power, it is 
 \subsubsection*{Simulation of system with simple controller}
 \addcontentsline{toc}{subsubsection}{Simulation of system with simple controller}
 
-In {\color{blue}  attitude1.m } the system is simulated with a controller based on the the control law from \eqref{eq:control_1}. This is done by using a for-loop initialized with Euler-parameters $\phi = 10 \circ$, $\theta = -5 \circ$ and $\psi = 15  \circ$. To initialize the unit quaternion-parameters the \texttt{MATLAB}-function \texttt{q = euler2q(phi,theta,psi)} from the library \texttt{MSS} was used. The function transforms from Euler-angles to unit quaternions. The angular velocity $\boldsymbol{\omega}$ is initialized to $\mathbf{0}$. 
+In {\color{blue}  attitude1.m } the system is simulated with a controller based on the the control law from \eqref{eq:control_1}. This is done by using a for-loop initialized with Euler-parameters $\phi = 10 ^\circ$, $\theta = -5 ^\circ$ and $\psi = 15  ^\circ$. To initialize the unit quaternion-parameters the \texttt{MATLAB}-function \texttt{q = euler2q(phi,theta,psi)} from the library \texttt{MSS} was used. The function transforms from Euler-angles to unit quaternions. The angular velocity $\boldsymbol{\omega}$ is initialized to $\mathbf{0}$. 
  
-The simulated state-response is calculated through a for-loop. The for-loop input is first calculated using the state, with $\mathbf{u} = -\mathbf{K}\mathbf{x}$, with K from \eqref{eq:K}. Second the Euler angles is calculated based on the state, using the  \texttt{MATLAB}-function \texttt{[phi,theta,psi] = q2euler(q)}.  From the equation of motion, \eqref{eq:x_dot}, $\dot{\mathbf{x}}$ is calculated. The next state is estimated using Euler integration on quaternion-coordinates $\mathbf{q}$ and the angular velocities $\mathbf{\omega}$. First the quaternions are normalized, such that it is unit quaternions. The Euler angles, unit quaternions and angular-velocities are saved in a variable table, used for plotting.
+The simulated state-response is calculated through a for-loop. The for-loop input is first calculated using the state, with $\mathbf{u} = -\mathbf{K}\mathbf{x}$, with K from \eqref{eq:K}. Second the Euler angles is calculated based on the state, using the  \texttt{MATLAB}-function \texttt{[phi,theta,psi] = q2euler(q)}.  From the equation of motion, \eqref{eq:x_dot}, $\dot{\mathbf{x}}$ is calculated. The next state is estimated using Euler integration on quaternion-coordinates $\mathbf{q}$ and the angular velocities $\boldsymbol{\omega}$. First the quaternions are normalized, such that it is unit quaternions. The Euler angles, unit quaternions and angular-velocities are saved in a variable table, used for plotting.
 
 The result after the plotting are represented in Figure \ref{fig:sim_attitude1_euler} - \ref{fig:sim_attitude1_tau}. 
 
-\begin{figure}[htb!]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/1_euler.eps}
 	\caption{The resulting output Euler angles from the simulation in {\color{blue}attitude1.m}}
 \label{fig:sim_attitude1_euler}
 \end{figure}
 
-\begin{figure}[htb!]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/1_q.eps}
 	\caption{ The resulting $ \boldsymbol{\omega}$ , part of $x$, from the simulation.  of the system and $\eta$. $\boldsymbol{\omega}$ is \textbf{w} in the figure. The figure is from the simulation in {\color{blue}attitude1.m}}
 \label{fig:sim_attitude1_q}
 \end{figure}
 
-\begin{figure}[htb!]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=1.00\textwidth]{figures/1_tau.eps}
 	\caption{The resulting input $\boldsymbol{\tau}$ from the simulation in {\color{blue}attitude1.m}}
 \label{fig:sim_attitude1_tau}
 \end{figure}
 
-The control law implemented in {\color{blue} attitude1.m} implements an  controller which is proportional to the states, meaning it will try to regulate  the states to $\mathbf{0}$. The control law implements a setpoint regulation. The controller impacts $\boldsymbol{\omega}$ and  $\dot{\mathbf{\eta}}$ is impacted by $\boldsymbol{\omega}$, from equation \eqref{eq:x_dot}.   By looking at Figure \ref{fig:sim_attitude1_euler} - \ref{fig:sim_attitude1_tau}, the steady-state value is reached after approximately 100 seconds are are zero, meaning the system behaves as expected. 
+The control law implemented in {\color{blue} attitude1.m} implements an  controller which is proportional to the states, meaning it will try to regulate  the states to $\mathbf{0}$. The control law implements a setpoint regulation. The input from the controller impacts $\boldsymbol{\omega}$ and  $\dot{\boldsymbol{\epsilon}}$ is impacted by $\boldsymbol{\omega}$, from equation \eqref{eq:x_dot}.   Looking at Figure \ref{fig:sim_attitude1_euler} - \ref{fig:sim_attitude1_tau}, the steady-state value is reached after approximately 100 seconds are are zero, meaning the system behaves as expected. 
 
 
 \subsection*{Problem 1.4}
 \addcontentsline{toc}{subsection}{Problem 1.4}
-A modified attitude control law which controls $\boldsymbol{\eta}$ to a desired value $\mathbf{x}_d = [\boldsymbol{\epsilon}_d^\top \boldsymbol{0}^\top]^\top$ is:
+A modified attitude control law which controls $\boldsymbol{\epsilon}$ to a desired value $\mathbf{x}_d = [\boldsymbol{\epsilon}_d^\top,  \boldsymbol{0}^\top]^\top$ is:
 
 \begin{equation}
     \boldsymbol{\tau} = - \mathbf{K}_d \boldsymbol{\omega} - k_p \tilde{\boldsymbol{\epsilon}}
@@ -255,7 +255,7 @@ $\tilde{\boldsymbol{\epsilon}}$ is the error in the imaginary part of the quater
     \tilde{\boldsymbol{q}}
     :=
     \begin{bmatrix}
-    \tilde{\boldsymbol{\eta}} \\
+    \tilde{\eta} \\
     \tilde{\boldsymbol{\epsilon}}
     \end{bmatrix}
     =
@@ -264,14 +264,14 @@ $\tilde{\boldsymbol{\epsilon}}$ is the error in the imaginary part of the quater
     \end{aligned}
 \end{equation}
 
-with $\bar{q} = [\eta, -\boldsymbol{\epsilon}^\top] ^\top$ and $\mathbf{S}(-\epsilon_d)$ being the skew-symmetric matrix. The quaternion product is defined as :
+with $\bar{\mathbf{q}} = [\eta, -\boldsymbol{\epsilon}^\top] ^\top$ and $\mathbf{S}(-\boldsymbol{\epsilon}_d)$ being the skew-symmetric matrix. The quaternion product is defined as :
 
 \begin{equation}
     \bar{\boldsymbol{q}}_d \otimes \boldsymbol{q}
     =
     \begin{bmatrix}
-    \boldsymbol{\eta}_{d} \boldsymbol{\eta} + \boldsymbol{\epsilon}_d^\top \boldsymbol{\epsilon} \\
-    \boldsymbol{\eta}_d \boldsymbol{\epsilon} - \boldsymbol{\eta} \boldsymbol{\epsilon}_d + \mathbf{S}(-\boldsymbol{\epsilon}_d) \boldsymbol{\epsilon}
+    \eta_{d} \eta + \boldsymbol{\epsilon}_d^\top \boldsymbol{\epsilon} \\
+    \eta_d \boldsymbol{\epsilon} - \eta \boldsymbol{\epsilon}_d + \mathbf{S}(-\boldsymbol{\epsilon}_d) \boldsymbol{\epsilon}
     \end{bmatrix}
     \label{eq:q_product}
 \end{equation}
