@@ -12,7 +12,7 @@ The sideslip angle is the angle from $x_b$ axis of {b} to the velocity vector of
     \label{eq:beta_r}
 \end{equation}
 
-defined by the relative velocity $v_r$ and relative speed $U_r$. The relative velocity in bodyframe in this assignment is defined as \eqref{eq:v_r}. The crab angle is defined in body, according to Fossen. In this assignment the relative velocity was defined to $\mathbf{v}^b_{b/n} = [1.5, 0,0]$, from problem 2.1. In problem 2.1 there was no current, and following the convention from problem 2.2, the velocity on a straight line relative to the ocean is given as $\mathbf{v}^b_{b/c} = [1.5, 0,0]$. \todo{åpen for omformuleirnger her ! } 
+defined by the relative velocity $v_r$ and relative speed $U_r$. The relative velocity in body frame in this assignment is defined as \eqref{eq:v_r}.\todo{Referansen funker ikke} The crab angle is defined in body, according to Fossen. In this assignment the relative velocity was defined to $\mathbf{v}^b_{b/n} = [1.5, 0,0]$, from problem 2.1. In problem 2.1 there was no current, and following the convention from problem 2.2, the velocity on a straight line relative to the ocean is given as $\mathbf{v}^b_{b/c} = [1.5, 0,0]$. \todo{åpen for omformuleirnger her ! } 
 
 The sideslip angle was calculated using equation \eqref{eq:beta_r}, giving sideslip angle of $0 ^\circ$. This result is natural, since the relative velocity consists of $v=0$, since  $\mathbf{v}^b_{b/c} = [1.5, 0,0]$. Since sidelip angle is defined by the realtive velociites, and the vehicle tries to drive on a straight line, but in reality the current carries the vehicle such that the straight line becomes not as intended ( since the current is constant). \todo{Should I include plot here ? }. The result of the current carrying the vehicle will be noticeable on the crab angle, as discussed in later sections. 
 
@@ -39,9 +39,17 @@ The  simulation of the translational motion with current, was chosen to be in to
 The expression for the position of the vehicle relative to ned referenceframe  is found by Euler integration, meaning $\mathbf{p}(i+1)^n_{b/n} = \mathbf{p}(i)^n_{b/n} + \mathbf{v}(i)^n_{b/n}*h $, with $h = 0.1$. The method used is the same as for the simulation without current.
 
 
-The crab angle, course angle and slip-angle was calculated using ??,?? and \eqref{eq:beta_r}, respectively, with $\mathbf{v}_r = \mathbf{v}^n_{b/c}$ and $\mathbf(v) = \mathbf{v}^n_{b/n}$.  Because the arcsin command in \texttt{MATLAB},\texttt{asin} only provides angles between $\frac{\pi}{2}$ and $\frac{\pi}{2}$,the crab angle and sideslip angle was approximated using $atan2(u,v)$, approximating $w= 0$.
+The crab angle, course angle and slip-angle was calculated using ??,?? and \eqref{eq:beta_r}, respectively, with $\mathbf{v}_r = \mathbf{v}^n_{b/c}$ and $\mathbf(v) = \mathbf{v}^n_{b/n}$.  Because the arcsin command in \texttt{MATLAB},\texttt{asin} only provides angles between $\frac{\pi}{2}$ and $\frac{\pi}{2}$,the crab angle and sideslip  approximating $w= 0$ giving :
 
+\begin{equation}
+\begin{aligned}
+	& \beta = atan2(v^b_{b/n}, u^b_{b/n} ) \\
+	& \beta_r = atan2(v^b_{b/c}, u^b_{b/c} )  \\
+	\label{eq:crab_slip_approx}
+\end{aligned}
+\end{equation}
 
+\subsection*{Result after simulation}
 
 The plots after the simulation are:
 
@@ -75,7 +83,7 @@ The plots after the simulation are:
 	\begin{subfigure}[b]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{figures/4_vel_current}
 		\caption{With current}
-		%\label{fig:4_vel_current}
+		%\label{fig:4_vel_ned_with_cur}
 	\end{subfigure}
 	\caption{The relative velocity and speed of the vehicle ,defined equation \eqref{eq:v_n_r}  in reference frame ned}
 	\label{fig:4_vel}
@@ -133,14 +141,14 @@ with damping factors and natural  frequencies as $\zeta_p = 0.1 $, $\zeta_q = 0.
 The steady state angular velocities $p_s$, $q_s$ and $r_s$ during turning for a constant rudder angle $\delta$ may be found by setting $\dot{p}= \dot{q} = \dot{r} = 0$. The equation for $\dot{r}$ may be found by inverse Laplace using the Nomoto equation. In \cite{Fossen2011} the time representation of the first order Nomotos model, equation (7.52) in \cite{Fossen2011} is estimated as 
 
 \begin{equation}
-    T \ddot{\psi} + \dot{\psi} = K \delta
+    T\ddot{\psi} + \dot{\psi} = K \delta
     \label{eq:nomo_first_order_time}
 \end{equation}
 
 In this problem $\theta = 2.0 ^\circ$ and $\phi = 0.0 ^\circ$, giving $\dot{\psi}$ as approximately $r$. Using \eqref{eq:nomo_first_order_time} the  first order Nomo-model time representation as:
 
 \begin{equation}
-    T \dot{r} + r = K \delta
+    dot{r} = - \frac{r}{T} +  K \delta
     \label{eq:r_time}
 \end{equation}
 
@@ -161,8 +169,122 @@ Using $\theta = 2.0$, $\phi = 0$ gives the steady-state velocities $p_s = 0$, $q
 
 In this problem the model of the vehicle is implemented with varying $\boldsymbol{\omega}^b_{b/n}$, described in equation \eqref{eq:r_time} and \eqref{eq:p_q_dot}. The system have the initial positions $\boldsymbol{\Theta} = [-1.0^\circ, 2,0^\circ, 0.0^\circ]^\top$ and $\boldsymbol{\omega}^b_{b/n} = [0,0,0]^\top s^{-1}$ . The start position $\mathbf{p}^n_{b/n} = [0,0,0]^\top m$. The vehicle is still exposed to the current descirbed in equation \eqref{eq:v_n_c}  and the rudder changes after 700 seconds from $\delta = 5^\circ$ to $\delta = 10^\circ$.
 
-\subsection{Simulation}
+\subsection{Explanation of code for Simulation}
 
-The system is simulated in the file {\color{\blue} attitude4.m}. 
+The system is simulated in the file {\color{blue} attitude4.m}. The files starts by initializing all the relevant variables. In the simulation the time step $h = 0.1$ .
+
+Because of varying $\boldsymbol{\omega}$, alstå the euler angles will change during the simulation. Therefore the first thing to happen is to calculate the new rotation matrix $\mathbf{R}^n_b$, which depends on the euler angles. To find $ \dot{\boldsymbol{\Theta}}$ equation (2.40) in \cite{Fossen2011} was used. Equation (2.40) states:
+
+\begin{equation}
+    \begin{aligned}
+    \begin{bmatrix}
+    \dot{\mathbf{p}}^n_{b/n} \\
+    \dot{\boldsymbol{\Theta}}_{nb} \\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+    \mathbf{R}^n_{b}(\boldsymbol{\Theta}_{nb}) & \mathbf{0}_{3x3} \\
+    \mathbf{0}_{3x3} & \mathbf{T}_\Theta (\boldsymbol{\Theta}_{nb})  \\
+    \end{bmatrix}
+    \begin{bmatrix}
+    \mathbf{v}^b_{b/n} \\
+    \mathbf{\omega}^b_{b/n} \\
+    \end{bmatrix}
+    \end{aligned}
+\end{equation}
+
+To find $\mathbf{v}^n_{b/n}$ first the $\mathbf{v}^b_{b/c} = [U \cos(rt), U \sin(r t),0]$, was calculated using the turning rate $r$ described by the Nomoto-equation. Since the current are constant in ned reference frame, the rotation of $\omega^n_{c/b} $ is zero, implying $\boldsymbol{\omega}^b_{c/b} = 0$. This means $ \boldsymbol{\omega}^b_{b/n} = \boldsymbol{\omega}^b_{b/c} + \boldsymbol{\omega}^b_{c/n}  = \boldsymbol{\omega}^b_{b/c} $. \todo{Should i be more spesific, or more wage ? What do you mean Alexandra ?}
+
+The speed relative to ned is  found  through using the constant current velocity, equation \eqref{eq:v_n_c}, realtive to ned and rotating the reatlive velocity of the boat to ned, giving the following equation:
+
+\begin{equation}
+    \mathbf{v}^n_{b/n} = \mathbf{R}^n_{b} \mathbf{v}^b_{b/c} + \mathbf{v}^n_{c/n}
+\end{equation}
+
+To find the position of the vehicle realtive to ned in ned reference-frame , again, euler intergration was used giving:
+\begin{equation}
+    \mathbf{p}^n_b(i+1) = \mathbf{p}^n_b(i) + \mathbf{v}^n_{b/n} * h
+\end{equation}
+
+Before the next iteration of the simulation may start the next $\boldsymbol{\omega}^b_{b/n}$ must be calculated. $\dot{p}$ and $\dot{q}$ is calculated using equation \eqref{eq:p_q_dot}, and $\dot{r}$ is calcualted using \eqref{eq:r_time}. Using euler integration, the next $\boldsymbol{\omega}$ is found, meaning:
+
+\begin{equation}
+\begin{aligned}
+	& p(i+1) = p(i) + \dot{p} * h \\
+	& q(i+1) = q(i) + \dot{q} * h \\
+	& p(i+1) = p(i) + \dot{p} * h
+\end{aligned}
+\end{equation}
+
+The crab angle and sideslip angle  is calculated using the same approximation $w = 0$, using equation \eqref{eq:crab_slip_approx}. The course angle is calculated using ?? \todo{find ref}.
+
+
+\subsection*{Discussion of result from simulation}
+
+The 
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/2_6_ang.eps}
+	\caption{Plot of euler angles}
+	\label{fig:2_6_ang}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/2_6_ang_vel.eps}
+	\caption{Plot of angular velocities $\omega^b_{b/n}$}
+	\label{fig:2_6_ang_vel}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/2_6_crab_slip_course.eps}
+	\caption{Plot of the crab-, slip- and courseangle}
+	\label{fig:2_6_crab}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{figures/2_6_pos}
+		\caption{Without current}
+		%\label{fig:4_vel}
+	\end{subfigure}
+	~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+	%(or a blank line to force the subfigure onto a new line)
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{figures/2_6_pos_cur}
+		\caption{With current}
+		%\label{fig:4_vel_ned_with_cur}
+	\end{subfigure}
+	\caption{The position of the vehicle relative to ned  in referenceframe ned}
+	\label{fig:2_6_pos}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{figures/2_6_vel_ned}
+		\caption{Without current}
+		%\label{fig:4_vel}
+	\end{subfigure}
+	~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+	%(or a blank line to force the subfigure onto a new line)
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{figures/2_6_vel_cur}
+		\caption{With current}
+		%\label{fig:4_vel_ned_with_cur}
+	\end{subfigure}
+	\caption{The velocity of the vehicle relative to ned  in referenceframe ned}
+	\label{fig:2_6_vel}
+\end{figure}
+
+
+
+
+
+
+
 
 

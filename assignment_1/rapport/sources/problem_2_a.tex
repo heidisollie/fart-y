@@ -1,6 +1,6 @@
 \section*{Problem 2 - Underwater Vehicles}
 \addcontentsline{toc}{section}{Problem 2 - Underwater Vehicles }
-For part 2 of this assignment the focus shifted from the satellite in space to an Underwater Vehicle. For the entirety of this part the vehicle moves at a constant depth $z=10m$ at a speed of $U=1.5m/s$ and a pitch angle of $\theta = 2.0^\circ$ and a roll angle of $\phi = 0^\circ$. While moving on a straight line the course angel was given $\chi = 30^\circ$.
+For part 2 of this assignment the focus was shifted from the satellite in space to an Underwater Vehicle. For the entirety of this part the vehicle moves at a constant depth $z=10m$ at a speed of $U=1.5m/s$ and a pitch angle of $\theta = 2.0^\circ$ and a roll angle of $\phi = 0^\circ$. While moving on a straight line the course angel was given $\chi = 30^\circ$.
 \subsection*{Problem 2.1}
 \addcontentsline{toc}{subsection}{Problem 2.1}
 The crab angle is given by the equation:
@@ -8,12 +8,12 @@ The crab angle is given by the equation:
     \beta = \chi - \psi
 \end{equation}
 
-Assuming there no currents and $\beta = 0$, the resulting heading is $\psi = \chi = 30^\circ$.
+Assuming no currents and $\beta = 0$, the resulting heading is $\psi = \chi = 30^\circ$.
 
 Another formulation for the crab angle is
 
 \begin{equation}
-    \beta = sin^{-1}(\frac{v}{U})
+    \beta = \sin^{-1}(\frac{v}{U})
     \label{eq:beta_2}
 \end{equation}
 
@@ -37,7 +37,7 @@ When it comes to the rest of the entries of the velocity vector one could choose
 \label{fig:angleOfAttackImg}
 \end{figure}
 
-The equations \eqref{eq:vel_vect_calc} are equal for both methods as they represent the same transformation. For both methods, $\beta$ the crab angle, is noted to be zero. Both also means recognizing the remaining angle in question, $\alpha$ the angle of attack, as negative $\theta$ as we know the vehicle to keep its depth unchanged, meaning the velocity vector is in the x-y-plane of the NED-frame. Equation \eqref{eq:beta_2} and \eqref{eq:vel_vect_calc} results in the same v. The calculations yielded the velocity vector
+The equations \eqref{eq:vel_vect_calc} are equal for both methods as they represent the same transformation. For both methods, $\beta$ the crab angle, is noted to be zero.  As we know the vehicle to keep its depth unchanged the velocity vector must reside in the x-y-plane of the NED-frame, but given the tilting of the vehicle the same is not necessary true for the body frame. Both ways of calculating the body velocities means recognizing the remaining angle in question, $\alpha$ the angle of attack, as $\theta$. Equation \eqref{eq:beta_2} and \eqref{eq:vel_vect_calc} results in the same v. The calculations yielded the velocity vector
 
 \begin{equation}
     \mathbf{v}^b_{b/n} =
@@ -50,7 +50,7 @@ The equations \eqref{eq:vel_vect_calc} are equal for both methods as they repres
 	\begin{bmatrix}
 		1.499 \\
 		0 \\
-		-0.05	
+		0.05	
 	\end{bmatrix}
 	\approx 
 	\begin{bmatrix}
@@ -66,11 +66,11 @@ The flight path of the vehicle is given by
     \gamma = \theta - \alpha
 \end{equation}
 
-As we already deduced $\alpha = -\theta$ the result is $\gamma = 2\theta = 4^\circ$
+As we already deduced $\alpha = \theta$ the result is thus $\gamma = 0^\circ$
 
 \subsection*{Problem 2.2}
 \addcontentsline{toc}{subsection}{Problem 2.2}
-The vehicle was assumed to be moving on a circle with Radius $R = 100$ with the velocities, assumed to be body-fixed and current-relative,
+The vehicle was assumed to be moving on a circle with Radius $R = 100$ with the velocities assumed to be body-fixed and current-relative
 \begin{equation}
 \label{eq:velocity}
     \mathbf{v}^b_{b/c} = 
@@ -87,7 +87,9 @@ The vehicle was assumed to be moving on a circle with Radius $R = 100$ with the 
 	\end{bmatrix}
 \end{equation}
 
-Assuming no currents and knowing the speed to be constant we could calculate the turning rate for the circle by dividing the degrees for one round by the time spent traveling that one round.
+The assumption that this velocity is relative to the current is a conscious choice. We felt controlling a vehicle relative to the currents present was the most intuitive. For us it felt natural that you would maneuver a vehicle with respect to the medium that carries you and thus relative to its velocity.
+
+Assuming no currents and knowing the speed to be constant we could calculate the turning rate for the circle by dividing one round by the time spent traveling that one round.
 
 \begin{subequations}
     \begin{align}
@@ -96,7 +98,7 @@ Assuming no currents and knowing the speed to be constant we could calculate the
     \end{align}
 \end{subequations}
 
-This resulted in a turning rate $r = 0.015$.
+This resulted in a turning rate $r = 0.015 rad/s$.
 
 $\boldsymbol{\omega}$ is defined a vector, 
 
@@ -149,21 +151,10 @@ Relative velocities are given by
     \label{eq_v_r}
 \end{equation}
 
-And while we already had the velocity of the body and of the current, they were in different frames. Both of the velocities needed to be in the same frame and we chose body frame.
+However, we already made the assumption that the velocity of the body relative to the current $\mathbf{v}_{b/c}$, was the velocity provided us in \eqref{eq:velocity}. Calculations are therefore not needed to find it. Finding the velocity vector of the body relative to NED, however, will require adding the current velocity to the given body velocity
 
 \begin{equation}
-    \mathbf{v}^b_{c/n} = \mathbf{R}_b^{n^{-1}}(\Theta^n_b)\mathbf{v}_{c/n}^n
-\end{equation}
-\todo{Er dette riktig theta?}
-Using the MATLAB function \texttt{Rzyx()}, inputting $\theta = 2.0^\circ$, $\phi = 0^\circ$ and $\psi = 30^\circ$ resulted in $\mathbf{v}_{c/n}^b$ which then could be subtracted from $\mathbf{v}_{b/c}^b$ to get
-
-\begin{equation}
-    \boldsymbol{v}_r^b = 
-    \begin{bmatrix}
-        U cos(\omega t) - 0.5711 \\
-        U sin(\omega t) - 0.1585 \\
-        - 0.0937
-    \end{bmatrix}
+    \mathbf{v}^n_{b/n} = \mathbf{R}_b^n(\Theta^n_b)\mathbf{v}_{b/c}^b + \mathbf{v}^n_{c/n}
 \end{equation}
 
-\todo{skrive om hvorfor det gir mening at denne varierer}
+\todo{Er dette riktig $\Theta$??}
