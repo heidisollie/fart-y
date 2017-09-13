@@ -44,13 +44,13 @@ h = 0.1;
 N = t_end/h;
 U = 1.5;
 
-v_n_b_c = zeros(N, 3);                    % velocities of body  realtive to ned in body coordinates                     
-p_n_b = zeros(N, 3);                    % position of body realative to ned in ned coordinates
-v_b_b_c = zeros(N, 3);                  % velocities of body with current  realtive to ned in body coordinates
-p_n_b_cur = zeros(N, 3);                  % position of body with current realative to ned in ned coordinates
-v_n_b_n =zeros(N, 3); 
-p_n_current = zeros(N,3);
-w_b_b_n = zeros(N,3);
+v_n_b_c = zeros(N, 3);                    % velocities of body realtive to current in ned coordinates                     
+p_n_b = zeros(N, 3);                    % position of body in ned coordinates
+v_b_b_c = zeros(N, 3);                  % velocities of body relative to current given in body
+p_n_b_cur = zeros(N, 3);                  % position of body with current in ned coordinates
+v_n_b_n =zeros(N, 3);                   % Velocity of body relative to NED given in NED
+p_n_current = zeros(N,3);               % The actual current
+w_b_b_n = zeros(N,3);                   % angular velocity of body relative to ned, given in body
 
 crab_angle = zeros(N,1);
 sideslip_angle = zeros(N,1);
@@ -81,13 +81,13 @@ for i = 1:N-1
     v_b_b_c(i,:) =  [U*cos(r(i)*t); U*sin(r(i)*t); 0]; 
     v_n_b_c(i,:) = (R_n_b* v_b_b_c(i,:)')'; 
     
-    % realtive to ocean with current
-    v_n_b_n(i,:) = (v_n_b_c(i,:) + v_n_c_n'); % velcity of body in ned realtive to ned
+    % realtive to ned with current
+    v_n_b_n(i,:) = (v_n_b_c(i,:) + v_n_c_n'); 
     
     % Prep for next iteration
-    p_n_b(i+1,:) = p_n_b(i,:) + v_n_b_c(i,:)*h;
-    p_n_b_cur(i+1,:) = p_n_b_cur(i,:) + v_n_b_n(i,:)*h;
-    p_n_current(i+1,:) = p_n_current(i,:) + (v_n_c_n*h)';
+    p_n_b(i+1,:) = p_n_b(i,:) + v_n_b_c(i,:)*h; % no current
+    p_n_b_cur(i+1,:) = p_n_b_cur(i,:) + v_n_b_n(i,:)*h; % with current
+    p_n_current(i+1,:) = p_n_current(i,:) + (v_n_c_n*h)'; % //the// current
     
     p_dot = -2*zeta_p*omega_p*p - omega_p^2*Theta(i,1);
     q_dot = -2*zeta_q*omega_q*q - omega_q^2*Theta(i,2);
@@ -107,8 +107,10 @@ for i = 1:N-1
     Theta(i+1,:) = Theta(i,:) + Theta_dot(:)'*h;
     Theta(i+1,3) = mod(Theta(i+1,3),2*pi);
     
-    crab_angle(i) = atan2(v_n_b_n(2),v_n_b_n(1)) + pi;
-    sideslip_angle(i) = atan2(v_b_b_c(2),v_b_b_c(1)) + pi;
+    v_b_b_n = R_n_b'*v_n_b_n(i,:)';
+    
+    crab_angle(i) = atan2(v_b_b_n(2),v_b_b_n(1)) + pi; 
+    sideslip_angle(i) = atan2(v_b_b_c(i,2),v_b_b_c(i,1)) + pi;
     course_angle(i) = mod((Theta(i,3) + crab_angle(i)),2*pi); 
 end
 
@@ -121,34 +123,37 @@ t = [0:h:t_end-1*h]';
 figure_num = 0;
 
 figure_num = figure_num + 1;
-figure(figure_num), axis tight equal;
-plot(p_n_b(1:t_shift_rudder/h,2), p_n_b(1:t_shift_rudder/h,1)), hold on;
-plot(p_n_b(t_shift_rudder/h:end,2), p_n_b(t_shift_rudder/h:end,1));
-plot(p_n_b_cur(:,2), p_n_b_cur(:,1)), xlabel('east [m]'),ylabel('north [m]'), title('Plot of vechicle position without current'), grid;
+figure(figure_num), axis equal;
+plot(p_n_b(:,2), p_n_b(:,1)), hold on; xlabel('east [m]'),ylabel('north [m]'), title('Plot of vechicle position without current'), grid;
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
-subplot(211), plot(t, v_n_b_c), xlabel('s'), ylabel('m/s'),title('Relative velocities'); legend('u','v','w');
+plot(p_n_b_cur(:,2), p_n_b_cur(:,1)); xlabel('east [m]'),ylabel('north [m]'), title('Plot of vechicle position with current'), grid;
+
+figure_num = figure_num + 1;
+figure(figure_num), axis tight equal;
+subplot(211), plot(t, v_n_b_c), xlabel('s'), ylabel('m/s'),title('Velocities relative to current'); legend('u','v','w');
 subplot(212), plot(t,speed_relative), xlabel('s'), ylabel('m/s'), title('Speed');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
-subplot(211), plot(t, r*rad2deg), xlabel('s'), ylabel(''),title('rudder');
-subplot(212), plot(t, cos(t.*r)), xlabel('s'), ylabel('m/s'),title('cos(t*r)'); legend('u','v','w');
+subplot(211), plot(t, v_n_b_n), xlabel('s'), ylabel('m/s'),title('Velocities relative to NED');  legend('u','v','w');
+subplot(212), plot(t,speed), xlabel('s'), ylabel('m/s'), title('Speed');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
 plot(t, crab_angle*rad2deg), hold on; 
 plot(t,sideslip_angle*rad2deg)
-plot(t,course_angle*rad2deg);title('Crab-, slip- and courseangle'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
+plot(t,course_angle*rad2deg);title('Crab-, slip- and course angle with current'); xlabel('t'); ylabel('deg'); legend('\beta', '\beta_r','\chi');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
-plot(t,Theta*rad2deg);title('Roll, pitch , yaw'); xlabel('t'); ylabel('deg'); legend('\phi', '\theta','\psi');
+plot(t,Theta*rad2deg);title('Roll, pitch , yaw with current'); xlabel('t'); ylabel('deg'); legend('\phi', '\theta','\psi');
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
-plot(t, w_b_b_n*rad2deg), legend('p', 'q','r'), hold on; 
+plot(t, w_b_b_n*rad2deg); title('Angular velocities with current'); legend('p', 'q','r'), hold on; 
+
 
 
 
