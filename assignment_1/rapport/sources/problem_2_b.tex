@@ -6,48 +6,42 @@
 \subsubsection*{Calculate sideslip angle}
 \addcontentsline{toc}{subsubsection}{Calculate sideslip angle}
 
-The sideslip angle is as the angle from $x_b$ axis of {b} to the velocity vector of the vehicle, with positive rotation about the $z_b$ axis of {b} as given by the right-hand screw convetion. The formmula for sideslip is therfore:
+The sideslip angle is the angle from $x_b$ axis of {b} to the velocity vector of the vehicle, with positive rotation about the $z_b$ axis of {b} as given by the right-hand screw convention. The formula for sideslip is therfore:
 \begin{equation}
-    \boldsymbol{\beta}_r = \arcsin( v^b_r/U^b_r)
+    \boldsymbol{\beta}_r = \arcsin( \mathbf{v}^b_r/U^b_r)
     \label{eq:beta_r}
 \end{equation}
-defined by the relative velocity $v_r$ and relative speed $U_r$. The relative velocity is defined as \eqref{eq:v_r}. To find the relative velocity it is necessary to rotate either the velocity of the vechicle or current. The relative velocity of the vehicle in body-reference frame is:
 
-\begin{equation}
-    \boldsymbol{v}^b_r = \boldsymbol{v}^b_{b/c} - \boldsymbol{v}^{b}_{c/n} =  \boldsymbol{v}^b_{b/c} - \mathbf{R}^b_n \boldsymbol{v}^{n}_{c/n} 
-    \label{eq:v_b_r}
-\end{equation}
+defined by the relative velocity $v_r$ and relative speed $U_r$. The relative velocity in bodyframe in this assignment is defined as \eqref{eq:v_r}. The crab angle is defined in body, according to Fossen. In this assignment the relative velocity was defined to $\mathbf{v}^b_{b/n} = [1.5, 0,0]$, from problem 2.1. In problem 2.1 there was no current, and following the convention from problem 2.2, the velocity on a straight line relative to the ocean is given as $\mathbf{v}^b_{b/c} = [1.5, 0,0]$. \todo{åpen for omformuleirnger her ! } 
 
-The crab angle for the vehicle moving in the straight line was found by first calculating the realtive velocity, using equation \eqref{eq:v_b_r}, with  the velocity \todo{check to rephrase, of on seems a bit strange}of  on a straight line  $\mathbf{v}_b^b = [1.5, 0, 0]$, found in assignemnt 2.1, and   the current velocity was calculated in assignment 2.3, using equation \eqref{eq:v_n_c}. \todo{Should i say something about the approximation}. The crab angle was calculated using equation \eqref{eq:beta_r}, giving sideslip angle of $-9.6357 ^\circ$. \todo{check if Alexandra agree} This means the vehicle is moving upwards relative to current, relative to body-frame. This makes sense since the vehicle and the current are moving in same directions, the sideslip angle is negative. \todo{ CONFUSED, ASK ALEXANDRA!}
+The sideslip angle was calculated using equation \eqref{eq:beta_r}, giving sideslip angle of $0 ^\circ$. This result is natural, since the relative velocity consists of $v=0$, since  $\mathbf{v}^b_{b/c} = [1.5, 0,0]$. Since sidelip angle is defined by the realtive velociites, and the vehicle tries to drive on a straight line, but in reality the current carries the vehicle such that the straight line becomes not as intended ( since the current is constant). \todo{Should I include plot here ? }. The result of the current carrying the vehicle will be noticeable on the crab angle, as discussed in later sections. 
 
 \subsubsection{Simulation of translational motion of the vehicle on the circle}
 
 The simulation of the translational motion was done by simulation in \texttt{MATLAB}. The initial conditions were : \todo{SET INN INITIAL CONDITIONS }. To simulate the translational motion without current, the velocity of the vehicle was calculated first:
 \begin{equation}
-    \mathbf{v}^n_{b/n} = \mathbf{R}^n_b \mathbf{v}^b_{b/c} =\mathbf{R}^n_b \mathbf{v}^b_{b/n} = \mathbf{R}^n_b [U*cos(\omega t), U*sin(\omega t), 0]^\top
+    \mathbf{v}^n_{b/n} = \mathbf{R}^n_b \mathbf{v}^b_{b/c} =\mathbf{R}^n_b \mathbf{v}^b_{b/n} = \mathbf{R}^n_b [U cos(\omega t), U sin(\omega t), 0]^\top
     \label{eq:v_n_b_c}
 \end{equation}
 
-Since there is no current, $\mathbf{v}^b_{b/c} = \mathbf{v}^b_{b/n}$.
+Because of no current, $\mathbf{v}^b_{b/c} = \mathbf{v}^b_{b/n}$.
 
-The position of the vechicle was found by using Euler integration,meaning the position in needed for vehicle $\mathbf{p}(i+1)^n_b = \mathbf{p}(i)^n_b + \mathbf{v}(i)^n_b*h $, with $h = 0.1$, which is the simulation step.
+The position of the vehicle was found by using Euler integration,meaning the position of vehicle is $\mathbf{p}(i+1)^n_{b/n} = \mathbf{p}(i)^n_{b/n} + \mathbf{v}(i)^n_{n}b*h $, with timestep $h = 0.1$.
  
-The  simulation of the translational motion with current, was choosen to be relative to ned referance frame with the position relative to the ocean surface, and not relative to the current. \todo{Agree Alexandra? Jeg forstår ikke helt hva setningen sier..?}. The first step was to calculate the velocity of the vehicle $\mathbf{v}^n_{b/c}$, as done in \eqref{eq:v_n_b_c}. Furthermore the velocity of the current relative to ned, expressed in ned $\mathbf{v}^n_{c/n}$ was calculated, from equation \eqref{eq:v_n_c}. The expression for the velocity of the vehicle relative to ned reference frame and relative to the ocean surface (meaning vehicle is moving with current) is:
+The  simulation of the translational motion with current, was chosen to be in to ned referanceframe with the position relative to the ocean surface, meaning $\mathbf{p}^n_{b/n}$. The first step was to calculate the velocity of the vehicle $\mathbf{v}^n_{b/c}$, as done in \eqref{eq:v_n_b_c}. Furthermore the velocity of the current relative to ned, expressed in ned $\mathbf{v}^n_{c/n}$ was calculated, from equation \eqref{eq:v_n_c}. The expression for the velocity of the vehicle relative to ned reference frame, meaning  relative to the ocean surface is:
+
 
 \begin{equation}
-    \mathbf{v}^n_{b/n} = \mathbf{v}^n_{b/c} + \mathbf{v}^n_{c/n}
+    \mathbf{v}^n_{b/n} = \mathbf{v}^n_{b/c} + \mathbf{v}^n_{c/n} =  \boldsymbol{v}^b_{b/c} + \mathbf{R}^b_n \boldsymbol{v}^{n}_{c/n} 
+    \label{eq:v_b_r}
 \end{equation}
 
-The expression for the position of the vechicle relative to ned reference frame and relative to the ocean-surface is found by euler integration, meaning $\mathbf{p}(i+1)^n_b = \mathbf{p}(i)^n_b + \mathbf{v}(i)^n_b*h $, with $h = 0.1$. The method used is the same as for the simulation without current.
+The expression for the position of the vehicle relative to ned referenceframe  is found by Euler integration, meaning $\mathbf{p}(i+1)^n_{b/n} = \mathbf{p}(i)^n_{b/n} + \mathbf{v}(i)^n_{b/n}*h $, with $h = 0.1$. The method used is the same as for the simulation without current.
 
-The relative velocity  in ned reference frame is by definition (referance \cite{Fossen2011} \todo{find reference}) of the vehicle is given as:
 
-\begin{equation}
-    \mathbf{v}^n_{r} = \mathbf{v}^n_{b/c} - \mathbf{v}^n_{c/n}
-    \label{eq:v_n_r}
-\end{equation}.
+The crab angle, course angle and slip-angle was calculated using ??,?? and \eqref{eq:beta_r}, respectively, with $\mathbf{v}_r = \mathbf{v}^n_{b/c}$ and $\mathbf(v) = \mathbf{v}^n_{b/n}$.  Because the arcsin command in \texttt{MATLAB},\texttt{asin} only provides angles between $\frac{\pi}{2}$ and $\frac{\pi}{2}$,the crab angle and sideslip angle was approximated using $atan2(u,v)$, approximating $w= 0$.
 
-The crab angle, course angle and slip-angle was calculated using ??,?? and \eqref{eq:beta_r}, respectively. Because the arcsin command in \texttt{MATLAB},\texttt{asin} only provides angles between $\frac{\pi}{2}$ and $\frac{\pi}{2}$,the crab angle and sideslip angle was approximated using $atan2(u,v)$, approximating $w= 0$.
+
 
 The plots after the simulation are:
 
@@ -105,11 +99,15 @@ The plots after the simulation are:
 	\caption{The crab-, course and sidslipangle  in reference frame ned}
 \end{figure}
 
-In figure \figref{fig:4_pos} the position of the vehicle realtive to the ocean is plotted using reference frame ned. Without current the vehicle makes a perfect circle with radius 100 m., as required and expected. With current the vehicle tries to make a perfect circle, but the current carries the vehicle upwards, making the path to the vehicle relative to  the ocean looking like a spiral. This is as expected, since the vehicle has velocity to drive in a circle (relative to the current), but the current carries the vehicle upstream, which makes the path of the vehicle relative to the ocean surface look as a spiral.
+In figure \figref{fig:4_pos} the position of the vehicle realtive to the ocean is plotted using referenceframe ned. Without current the vehicle makes a perfect circle with radius 100 m., as required and expected. With current the vehicle tries to make a perfect circle, but the current carries the vehicle upwards, making the path to the vehicle relative to  the ocean looking like a spiral. This is as expected, since the vehicle has velocity to drive in a circle (relative to the current), but the current carries the vehicle upstream, which makes the path of the vehicle relative to the ocean surface look as a spiral.
 
-The relative speed, defined as $v_r = v - v_c$, for the vehicle in NED reference frame is shown in figure \figref{fig:4_vel}. The relative speed of the vehicle without current is constant, since the current is zero, and $v^b_{b/c}=v^b_{b/n}$ and this is consistent of $[U \sin(\omega *t), U \cos(\omega*t),0]^\top$ the non rm value is $U = 1.5 m/s$. Since there is also current then, the relative speed of the vehicle in reference frame NED is affected by the current. Because the relative velocity is $v_r = v - v_c$, and $\mathbf{v}_c != \mathbf{0}$, the speed is not constant, but varies sinusoidally. \todo{any explanation why sinusoidal other than this ? Should i explain it more ?}
+The speed an velocity of vehicle relative to the ocean current in NED reference frame is shown in figure \figref{fig:4_vel}. The realtive velocitites will be the same with and without current, because they we assumed that the ships velocity in body frame relative to current is $\mathbf{v}^b_{b/c} = [U \cos(\omega  *t), U \sin(\omega*t) , 0]$ and do not depend on current. Both the plots in \figref{fig:4_vel} show constant speed, since $\mathbf{v}^b_{b/c}$ consits of a cosinus and sinusoidal  depending both on the  frequency and time . The velocities as expected is periodic, with period of 1.5. \todo{check with plots}
 
-The plots of crab angle, slip angle and course angle goes from $0-360^\circ$. This is reasonable since the boat is driving in a circle with the "snout" \todo{check expression, snute på engelsk} in the same direction. In the plot without current $\mathbf{v}^b_{b/c} = \mathbf{v}^b_{b/n} $, this means $\beta_r = \beta$, and is the same result as from the plot. In the plot with current the course angle and beta are the same as in plot without current, while the slip angle varies because of the current velocity not being zero. Since there is current both the relationship between $u^b_r$ and $v^b_r$ varies periodically, meaning the side slip angle varies periodically. The reason for the current and course angle behaving this way is the same, since they are not dependent on the current velocity. \todo{Check with Alexandra if the crab angle should be v\_b\_b\_c or v\_b\_b\_n in the equation} .
+
+
+The the velocity of the body  relative to ned , in referenceframe ned, $\mathbf{v}^n{b/n}$,  is shown in figure \figref{fig:4_vel_relative}. The speed of the vehicle realtive to ned without current is constant, same as the discussiion before since and $v^b_{b/c}=v^b_{b/n}$ and this is consistent of $[U \sin(\omega *t), U \cos(\omega*t),0]^\top$ the non rm value is $U = 1.5 m/s$. Since there is also current then, the speed and velocity of the vehicle in reference frame NED is affected by the current. Because the relative velocity is $\mathbf{v}_r = v + v_c$, and $\mathbf{v}_c != \mathbf{0}$, the speed is not constant, but varies sinusoidally. The same goes for the velocity, affected by the constant current velocities.
+
+The plots of crab angle, slip angle and course angle goes from $0-360^\circ$. This is reasonable since the vehicle is driving in a circle with the "snout" \todo{check expression, snute på engelsk} in the same direction. In the plot without current $\mathbf{v}^b_{b/c} = \mathbf{v}^b_{b/n} $, this means $\beta_r = \beta$, and is the same result as from the plot. In the plot with current the sideslip angle $\beta_r$ are the same as in plot without current. The crabangle and course angle which depends upon the velocity of the current is therfore different in the plot with current. Since there is current both the relationship between $u^b$ and $v^b$ varies periodically, meaning the side crab angle and course angle varies periodically. The reason for this is that course angle  is linear with crab angle and yaw. \todo{should i commen't more about why goes from 0 - 360}
 
 \subsection*{Problem 2.5}
 
@@ -146,7 +144,7 @@ In this problem $\theta = 2.0 ^\circ$ and $\phi = 0.0 ^\circ$, giving $\dot{\psi
     \label{eq:r_time}
 \end{equation}
 
-Using \eqref{eq:r_time} and \eqref{eq:p_q_dot} and setting $\dot{p} =\dot{q} = \dot{r}$ gives the following expression for the seaty state of the linear velocities $\dot{\omega}^b_{b/n}$:
+Using \eqref{eq:r_time} and \eqref{eq:p_q_dot} and setting $\dot{p} =\dot{q} = \dot{r}$ gives the following expression for the steady state of the linear velocities $\dot{\omega}^b_{b/n}$:
 
 \begin{equation}
 \begin{aligned}
@@ -161,18 +159,10 @@ Using $\theta = 2.0$, $\phi = 0$ gives the steady-state velocities $p_s = 0$, $q
 
 \subsection*{Problem 2.6}
 
+In this problem the model of the vehicle is implemented with varying $\boldsymbol{\omega}^b_{b/n}$, described in equation \eqref{eq:r_time} and \eqref{eq:p_q_dot}. The system have the initial positions $\boldsymbol{\Theta} = [-1.0^\circ, 2,0^\circ, 0.0^\circ]^\top$ and $\boldsymbol{\omega}^b_{b/n} = [0,0,0]^\top s^{-1}$ . The start position $\mathbf{p}^n_{b/n} = [0,0,0]^\top m$. The vehicle is still exposed to the current descirbed in equation \eqref{eq:v_n_c}  and the rudder changes after 700 seconds from $\delta = 5^\circ$ to $\delta = 10^\circ$.
 
-References can be placed in the bibliography.bib and referred to as \cite{Fossen2011} and \cite{Fjellstad1994857}.
+\subsection{Simulation}
+
+The system is simulated in the file {\color{\blue} attitude4.m}. 
 
 
-% files added by teacher
-
-Answer Problem 2.4 here. Figures can be inserted as:
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.7\textwidth]{assignment_1/rapport/figures/fig1} 
-	\caption{Figure of something useful.}
-	\label{fig:fig1}
-\end{figure}
-
-You can now refer to this figure as \figref{fig:fig1}. You can also insert figures side-by-side:
