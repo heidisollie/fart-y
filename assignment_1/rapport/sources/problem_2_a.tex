@@ -30,6 +30,13 @@ When it comes to the rest of the entries of the velocity vector one could choose
     \end{align}
 \end{subequations}
 
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.70\textwidth]{figures/angleOfAttackImg.png}
+	\caption{A visualization of the underwater vehicle and its velocity vector for better understanding of the calculation of the velocity.}
+\label{fig:angleOfAttackImg}
+\end{figure}
+
 The equations \eqref{eq:vel_vect_calc} are equal for both methods as they represent the same transformation. For both methods, $\beta$ the crab angle, is noted to be zero. Both also means recognizing the remaining angle in question, $\alpha$ the angle of attack, as negative $\theta$ as we know the vehicle to keep its depth unchanged, meaning the velocity vector is in the x-y-plane of the NED-frame. Equation \eqref{eq:beta_2} and \eqref{eq:vel_vect_calc} results in the same v. The calculations yielded the velocity vector
 
 \begin{equation}
@@ -105,6 +112,13 @@ It is then strange that $\boldsymbol{\omega}$ is fed into trigonometric function
 
 With our constant speed, we can calculate $\beta$ using \eqref{eq:beta_2}. The result is thus $\beta = \omega t$, meaning $\beta$ is changing with time. This is because, while the vehicle is moving in a circular pattern as a result of its changing velocity, the heading of the vehicle is not. How the vehicle is able to move in all directions without turning like some sort of kolibri, is unknown to us. Specifications of the vehicle on that front have not been given. 
 
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.70\textwidth]{figures/circleWithU.png}
+	\caption{.}
+\label{fig:circleWithU}
+\end{figure}
+
 \subsection*{Problem 2.3}
 \addcontentsline{toc}{subsection}{Problem 2.3}
 
@@ -137,7 +151,7 @@ Relative velocities are given by
 And while we already had the velocity of the body and of the current, they were in different frames. Both of the velocities needed to be in the same frame and we chose body frame.
 
 \begin{equation}
-    \mathbf{v}_{c/n}^b = \mathbf{R}_b^n^{-1}(\Theta^n_b)\mathbf{v}_{c/n}^n
+    \mathbf{v}^b_{c/n} = \mathbf{R}_b^{n^{-1}}(\Theta^n_b)\mathbf{v}_{c/n}^n
 \end{equation}
 \todo{Er dette riktig theta?}
 Using the MATLAB function \texttt{Rzyx()}, inputting $\theta = 2.0^\circ$, $\phi = 0^\circ$ and $\psi = 30^\circ$ resulted in $\mathbf{v}_{c/n}^b$ which then could be subtracted from $\mathbf{v}_{b/c}^b$ to get
