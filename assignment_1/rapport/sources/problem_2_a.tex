@@ -40,6 +40,7 @@ When it comes to the rest of the entries of the velocity vector one could choose
 The equations \eqref{eq:vel_vect_calc} are equal for both methods as they represent the same transformation. For both methods, $\beta$ the crab angle, is noted to be zero. Both also means recognizing the remaining angle in question, $\alpha$ the angle of attack, as negative $\theta$ as we know the vehicle to keep its depth unchanged, meaning the velocity vector is in the x-y-plane of the NED-frame. Equation \eqref{eq:beta_2} and \eqref{eq:vel_vect_calc} results in the same v. The calculations yielded the velocity vector
 
 \begin{equation}
+    \mathbf{v}^b_{b/n} =
     \begin{bmatrix}
 		u \\
 		v \\
@@ -144,7 +145,7 @@ which returns the velocity of the current, relative to NED and given in NED. $\m
 Relative velocities are given by
 
 \begin{equation}
-    \boldsymbol{v}_r = \boldsymbol{v} - \boldsymbol{v}_c
+    \boldsymbol{v}_r = \boldsymbol{v}_{b/c} = \boldsymbol{v}_{b/n} - \boldsymbol{v}_{c/n}
     \label{eq_v_r}
 \end{equation}
 
