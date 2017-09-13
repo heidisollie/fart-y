@@ -11,6 +11,9 @@ phi = 0;
 theta = 2.0*deg2rad;
 psi = 30*deg2rad;
 
+%Speed
+U = 1.5;
+
 % current parameters
 U_c = 0.6; % m/s
 alpha_c = 10 * deg2rad;
@@ -20,20 +23,13 @@ v_n_c_n = [U_c*cos(alpha_c)*cos(beta_c);
          U_c*sin(beta_c);
          U_c*sin(alpha_c)*cos(beta_c)]; % Current velocity in ned
 
-v_b_b_c = [1.5;  0; 0];
+v_b_b_c = [1.5;  0; 0]; % This is the velocity RELATIVE to the current
 
 R_n_b = Rzyx(phi,theta,psi); 
 
 %% calculating sideslip angle
-% withcurrent
-v_b_r = v_b_b_c - inv(R_n_b)*v_n_c_n; % velocity realtive for vechicle ( current moving faster)
-U_r = norm(v_b_r)
-sideslip_angle = asin(v_b_r(2)/U_r)*rad2deg
 
-% without current
-v_b_r = v_b_b_c;
-U_r = norm(v_b_r);
-sideslip_angle = asin(v_b_r(2)/U_r)*rad2deg
+sideslip_angle = asin(v_b_b_c(2)/U)*rad2deg
 
 %% Task 2.4   Simulation and plotting
 
