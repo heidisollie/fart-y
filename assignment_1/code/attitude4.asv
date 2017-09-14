@@ -44,20 +44,19 @@ h = 0.1;
 N = t_end/h;
 U = 1.5;
 
-v_n_b_c = zeros(N, 3);                  % velocities of body realtive to current in ned coordinates                     
+v_n_b_c = zeros(N, 3);                    % velocities of body realtive to current in ned coordinates                     
 p_n_b = zeros(N, 3);                    % position of body in ned coordinates
 v_b_b_c = zeros(N, 3);                  % velocities of body relative to current given in body
-p_n_b_cur = zeros(N, 3);                % position of body with current in ned coordinates
+p_n_b_cur = zeros(N, 3);                  % position of body with current in ned coordinates
 v_n_b_n =zeros(N, 3);                   % Velocity of body relative to NED given in NED
 p_n_current = zeros(N,3);               % The actual current
 w_b_b_n = zeros(N,3);                   % angular velocity of body relative to ned, given in body
 
 crab_angle = zeros(N,1);
 sideslip_angle = zeros(N,1);
-Theta = zeros(N, 3);                      
-r = zeros(N, 1);                     
+Theta = zeros(N, 3);                     % Euler angles 
+r = zeros(N, 1);                    % Euler angles 
 course_angle = zeros(N, 1);
-rudder = zeros(N,1);
 
 t_shift_rudder = 700;
 
@@ -97,11 +96,10 @@ for i = 1:N-1
     q = q + q_dot*h;
     
     if(t < t_shift_rudder)
-        delta = 5*deg2rad; 
+        delta = 5*deg2rad;
     else
         delta = 10*deg2rad;
     end 
-    rudder(i) = delta;
     
     r_dot = -(r(i)/T_n) + (K_n/T_n)*delta;
     r(i+1) = r(i) + r_dot*h;
@@ -152,12 +150,13 @@ figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
 plot(t,Theta*rad2deg);title('Roll, pitch , yaw with current'); xlabel('s'); ylabel('deg'); legend('\phi', '\theta','\psi');
 
-
+rudder = ones(N,1);
+rudder(1
 
 figure_num = figure_num + 1;
 figure(figure_num), axis tight equal;
 subplot(211); plot(t, w_b_b_n*rad2deg); title('Angular velocities with current');xlabel('s'); ylabel('degres per second');  legend('p', 'q','r'), hold on;
-subplot(212); plot(t, rudder*rad2deg); title('Rudder \delta');xlabel('s'); ylabel('deg'); hold on; 
+subplot(211); plot(t, w_b_b_n*rad2deg); title('Angular velocities with current');xlabel('s'); ylabel('degres per second');  legend('p', 'q','r'), hold on; 
 
 
 
