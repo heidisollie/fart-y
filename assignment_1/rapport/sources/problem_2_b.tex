@@ -137,7 +137,7 @@ The pitch and roll motions are given as
 with damping factors and natural frequencies as $\zeta_p = 0.1 $, $\zeta_q = 0.2 $, $\omega_p = 0.1 $ and $\omega_q = 0.05 $. 
 
 \subsubsection*{Calculations of steady state}
-\addcontentsline{toc}{subsection}{Problem 2.4}
+\addcontentsline{toc}{subsubsection}{Calculations of steady state}
 
 The steady state angular velocities $p_s$, $q_s$ and $r_s$ during turning for a constant rudder angle $\delta$ may be found by setting $\dot{p}= \dot{q} = \dot{r} = 0$. The equation for $\dot{r}$ may be found by applying the inverse Laplace using the Nomoto equation. In \cite{Fossen2011} the time representation of the first order Nomotos model, equation (7.52) in \cite{Fossen2011} is estimated as 
 
@@ -169,12 +169,12 @@ This means the steady state angular velocities $p_s = \frac{1}{2} \phi ^\circ s^
 \subsection*{Problem 2.6}
 \addcontentsline{toc}{subsection}{Problem 2.6}
 
-In this problem the model of the vehicle is implemented by varying $\boldsymbol{\omega}^b_{b/n}$, described in equation \eqref{eq:r_time} and \eqref{eq:p_q_dot}. The system have the initial positions $\boldsymbol{\Theta} = [-1.0^\circ, 2,0^\circ, 0.0^\circ]^\top$ and $\boldsymbol{\omega}^b_{b/n} = [0,0,0]^\top s^{-1}$ . The start position is $\mathbf{p}^n_{b/n} = [0,0,0]^\top m$. The vehicle is still exposed to the current described in equation \eqref{eq:v_n_c}  and the rudder changes after 700 seconds from $\delta = 5^\circ$ to $\delta = 10^\circ$.
+In this problem the model of the vehicle is implemented by varying $\boldsymbol{\omega}^b_{b/n}$, described in equation \eqref{eq:r_time} and \eqref{eq:p_q_dot}. The system have the initial positions $\boldsymbol{\Theta} = [-1.0^\circ, 2,0^\circ, 0.0^\circ]^\top$ and $\boldsymbol{\omega}^b_{b/n} = [0,0,0]^\top s^{-1}$ . The start position is $\mathbf{p}^n_{b} = [0,0,0]^\top m$. The vehicle is still exposed to the current described in equation \eqref{eq:v_n_c}  and the rudder changes after 700 seconds from $\delta = 5^\circ$ to $\delta = 10^\circ$.
 
-Since the current is constant in NED reference frame, the rotation of $\omega^n_{c/b} $ is zero, implying $\boldsymbol{\omega}^b_{c/b} = 0$. This means $ \boldsymbol{\omega}^b_{b/n} = \boldsymbol{\omega}^b_{b/c} + \boldsymbol{\omega}^b_{c/n}  = \boldsymbol{\omega}^b_{b/c} $. \todo{Should i be more spesific, or more wage ? What do you think Alexandra ?}
+Since the current is constant in NED reference frame, the rotation of $\omega^n_{c/b} $ is zero, implying $\boldsymbol{\omega}^b_{c/b} = 0$. This means $ \boldsymbol{\omega}^b_{b/n} = \boldsymbol{\omega}^b_{b/c} + \boldsymbol{\omega}^b_{c/n}  = \boldsymbol{\omega}^b_{b/c} $. \todo{Should i be more spesific, or more wage ? What do you think Alexandra ? Seems plausible, but I'm no expert at this}
 
-\subsection*{The code for simulation}
-\addcontentsline{toc}{subsection}{The code for simulation}
+\subsection*{Simulation}
+\addcontentsline{toc}{subsubsection}{Simulation}
 
 The system is simulated in the file {\color{blue} attitude4.m}. The files start by initializing all the relevant variables. In the simulation the time step is $h = 0.1$ .
 
@@ -211,9 +211,9 @@ To find the position of the vehicle relative to NED in NED reference frame, agai
 \begin{equation}
     \mathbf{p}^n_b(i+1) = \mathbf{p}^n_b(i) + \mathbf{v}^n_{b/n} * h
 \end{equation}
-with i equal the iteration number.
+with i equal to the iteration number.
 
-Before the next iteration of the simulation-for-loop can start the new $\boldsymbol{\omega}^b_{b/n}$ must be calculated. $\dot{p}$ and $\dot{q}$ is calculated using equation \eqref{eq:p_q_dot}, and $\dot{r}$ is calcualted using \eqref{eq:r_time}. Using Euler integration, the next $\boldsymbol{\omega}$ is found, giving:
+Before the next iteration of the simulation-for-loop can start, the new $\boldsymbol{\omega}^b_{b/n}$ must be calculated. $\dot{p}$ and $\dot{q}$ is calculated using equation \eqref{eq:p_q_dot}, and $\dot{r}$ is calcualted using \eqref{eq:r_time}. Using Euler integration, the next $\boldsymbol{\omega}$ is found, giving:
 
 \begin{equation}
 \begin{aligned}
@@ -223,19 +223,22 @@ Before the next iteration of the simulation-for-loop can start the new $\boldsym
 \end{aligned}
 \end{equation}
 
-The crab and sideslip angle are calculated using \eqref{eq:crab_slip_approx}, assuming  $w$ ,from $\mathbf{v} =[u,v,w]^\top$, is approximately zero. The course angle is calculated using \eqref{eq:chi}.
+The crab and sideslip angles are calculated using \eqref{eq:crab_slip_approx}, assuming  $w$ ,from $\mathbf{v} =[u,v,w]^\top$, is approximately zero. The course angle is calculated using \eqref{eq:chi}.
 
 
 \subsubsection*{Discussion of result from simulation}
-\addcontentsline{toc}{subsubsection}{Discussion of result from simulation}
+\addcontentsline{toc}{subsubsection}{Discussion of plots from simulation}
 
-The plot of the Euler angles are presented in figure \figref{fig:2_6_ang}, and shows that $\theta$ and $\phi$ have small oscillations in the start, but with a steady state of approximately $\phi_s = 0$ and $\theta_s = 0$. The Euler angles depend on the angular velocities. In the plot of the angular velocities, figure \figref{fig:2_6_ang_vel}, there are noticeable oscillations to begin with. This is because of the initial values of the Euler angles not being zero. There are dependencies between Euler angles and angular velocities through, shown through the transformation matrix, represented in equation \eqref{eq:eta_dot_J_eta}.  \todo{ Føler det er flere grunner....}. After a while $p$ and $r$ gets to steady state, which is approximately zero, as well as the Euler angles. In problem 2.5, there were calculated an equation, equation \eqref{eq:omega_s} for the   steady state values for $p$ and $q$.Using the steady state values for $\phi = 0$ and $\theta = 0$ gives $p_s = 0 deg/s^\circ$ and  $q_s = 0 deg/s$. This means $p$ and $q$ approaching calculated   steady state value.  
+The plot of the Euler angles are presented in \figref{fig:2_6_ang}, and shows that $\theta$ and $\phi$ have small oscillations in the start, but with a steady state of approximately $\phi_s = 0$ and $\theta_s = 0$. The Euler angles depend on the angular velocities. In the plot of the angular velocities, \figref{fig:2_6_ang_vel}, there are noticeable oscillations to begin with. $p$ and $q$ oscillates in the transient before they
+converges to 0, witch corresponds to mass-spring-damper systems. This is because of the initial values of the Euler angles are not zero.
 
-The yaw is more or less growing linearly, going from $0-360 ^\circ$. This is consistent with $r = \dot{\psi}$, so that with constant rudder the yaw is linearly growing, as expected with a vehicle going in a circle, with a bow chaining directions. $r$ is expressed as an first order differential equation through the Nomoto model, and  figure \figref{fig:2_6_ang_vel} looks like the step response of a first order system. We get a step response because first $\delta = 5^\circ$ and after 700 seconds $\delta = 10^\circ$.  The change in the rudder is noticeable both in the plot of the yaw and in the plot of the rudder. In the plot of the yaw the slope is larger after 700 seconds, consistent with higher value of $r$. The transient of the $r$ is also noticeable on the yaw, with a slope of yaw not being linear. The angular velocity $r$ has two steady states, approximately  $0.5^\circ s^{-1}$  and $1.0^\circ s^{-1}$, this is consistent with the result from problem 2.5 with steady state value $r_s = K*\delta$, implying a steady state value of $r_s = 0.5^\circ s^{-1}$. 
+There are dependencies between Euler angles and angular velocities through the transformation matrix, represented in equation \eqref{eq:eta_dot_J_eta}.  \todo{ Føler det er flere grunner....}. After a while $p$ and $r$ gets to steady state, which is approximately zero, as well as the Euler angles. In problem 2.5, we calculated an equation, equation \eqref{eq:omega_s} for the steady state values for $p$ and $q$.Using the steady state values for $\phi = 0$ and $\theta = 0$ gives $p_s = 0 deg/s$ and  $q_s = 0 deg/s$. This means $p$ and $q$ approaching calculated   steady state value.\todo{i am not sure...}  
 
-Looking at the steady state values there are approximately no angular velocities around $x_b$ and $y_b$, while around $z_b$ there is a constant angular velocity, meaning the vehicle will turn in a circle about $z_b$ as long as there is rudder. \todo{that do you think about the notaiton alexandra deg /sec osv. }.
+The yaw is more or less growing linearly, going from $0-360 ^\circ$. This is consistent with $r = \dot{\psi}$, so that with constant rudder the yaw is linearly growing, as expected with a vehicle going in a circle, with a bow chaining directions. $r$ is expressed as an first order differential equation through the Nomoto model, and  figure \figref{fig:2_6_ang_vel} looks like the step response of a first order system. We get a step response because first $\delta = 5^\circ$ and after 700 seconds $\delta = 10^\circ$.  The change in the rudder is noticeable both in the plot of the yaw and in the plot of the r. In the plot of the yaw the slope is larger after 700 seconds, consistent with higher value of $r$. The transient of the $r$ is also noticeable on the yaw, with a slope of yaw not being linear. The angular velocity $r$ has two steady states, approximately  $0.5^\circ s^{-1}$  and $1.0^\circ s^{-1}$, this is consistent with the result from problem 2.5 with steady state value $r_s = K*\delta$, implying a steady state value of $r_s = 0.5^\circ s^{-1}$ and $1.0^\circ s^{-1}$. 
 
-The change in pitch and roll angles as time passes makes sense from the perspective of the model. In our model of the vehicle, pitch and roll are as good as decoupled from yaw. In a realistic world, this is not true, and therefore roll and pitch would most likely be more affected by the change in yaw in the real world.\todo{anything to add ?}
+Looking at the steady state values of $\boldsymbol{\omega}^n_{b/n}$ there are approximately no angular velocities around $x_b$ and $y_b$, while around $z_b$ there is a constant angular velocity, meaning the vehicle will turn in a circle about $z_b$ as long as the rudder is nonzero. \todo{that do you think about the notaiton alexandra deg /sec osv. Den er grei :)}.
+
+The change in pitch and roll angles as time passes makes sense from the perspective of the model. In our model of the vehicle, pitch , roll and yaw are as good as decoupled, especially in steady state. Looking at the plots of the Euler angles and the angular velocities, there are no connection between $\phi$ and $\theta$ and $r$, consistent with the equations of the system. In a realistic world, this is not true, and therefore roll and pitch would most likely be more affected by the change in yaw in the real world.\todo{anything to add ?}
 
 
 \begin{figure}[!ht]
@@ -252,7 +255,7 @@ The change in pitch and roll angles as time passes makes sense from the perspect
 	\label{fig:2_6_ang_vel}
 \end{figure}
 
-The plot of the position of the vehicle relative to NED in NED reference frame is represented in figure \ref{fig:2_6_pos}, both with and without current. In the plot with current, figure \ref{fig:2_6_pos_current} the shape is similar to the plot of the vehicle moving in a circle, figure \ref{fig:4_pos_current}. The difference is that this time the radius of the circles changes. This is more apparent in the position plot of the vehicle without current, figure \ref{fig:2_6_pos_without_current}. In this figure it is apparent that  in the beginning when the radius decreases, $r$ increases as it reaches its steady state. When the rudder changes at 700 seconds, it start on a "new circle" which intersects with the old bigger circle. Looking at figure \ref{fig:2_6_pos_without_current} it shows that the circle increases it's radius as time increases. This happens due to a unrealistic simplification of the model of the vehicle. When the rudder suddenly increases this simultaneously affects the velocity, from figure \figref{fig:2_6_vel} a), affecting the frequency of the signal. The result of the sudden change in frequency of the velocity is the increasing radius of the circle. Trying different switching times, different results are achieved on the form of the new circle. A switching time better matching the changing the "form" and "frequency" of the velocity, implies better matching of the frequency.  
+The plot of the position of the vehicle relative to NED in NED reference frame is represented in \ref{fig:2_6_pos}, both with and without current. In the plot with current,  \ref{fig:2_6_pos_current} the shape is similar to the plot of the vehicle moving in a circle, \ref{fig:4_pos_current}. The difference is that this time the radius of the circles changes. This is more apparent in the position plot of the vehicle without current,  \ref{fig:2_6_pos_without_current}. In this figure we see that the vehicle first approaches a larger circle as the r increases to its steady state, resulting in a decrease in the circle radius before reaching steady state and before the change in rudder is made. This is as expected from real world experience. When the rudder changes at 700 seconds, it start on a "new circle" which intersects with the old bigger circle. Looking at \ref{fig:2_6_pos_without_current} it shows that the circle increases it's radius as time increases which does not . This happens due to a unrealistic simplification of the model of the vehicle. When the rudder suddenly increases this simultaneously affects the velocity, from figure \figref{fig:2_6_vel} a), affecting the frequency of the signal. The result of the sudden change in frequency of the velocity is the increasing radius of the circle. Trying different switching times, different results are achieved on the form of the new circle. A switching time better matching the changing the "form" and "frequency" of the velocity, implies better matching of the frequency.  
 
 The reason for the first circle not having increasing radius, is because the start velocity was $\mathbf{0}$, meaning there was no mismatching of frequencies.  \todo{enig alexandra ?}
 
