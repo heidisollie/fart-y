@@ -6,6 +6,7 @@ For part 2 of this assignment the focus was shifted from the satellite in space 
 The crab angle is given by the equation:
 \begin{equation}
     \beta = \chi - \psi
+    \label{eq:chi}
 \end{equation}
 
 Assuming no currents and $\beta = 0$, the resulting heading is $\psi = \chi = 30^\circ$.
@@ -113,7 +114,7 @@ $\boldsymbol{\omega}$ is defined a vector,
 
 It is then strange that $\boldsymbol{\omega}$ is fed into trigonometric functions the way it is in \eqref{eq:velocity}. For this to hold, we need a numerical value to represent $\boldsymbol{\omega}$. Assuming our only rotation is about the z-axis, we can approximate p and q to zero, making $\omega = r = 0.015$.
 
-With our constant speed, we can calculate $\beta$ using \eqref{eq:beta_2}. The result is thus $\beta = \omega t$, meaning $\beta$ is changing with time. This is because, while the vehicle is moving in a circular pattern as a result of its changing velocity, the heading of the vehicle is not. How the vehicle is able to move in all directions without turning like some sort of kolibri, is unknown to us. Specifications of the vehicle on that front have not been given. 
+With our constant velocity, we can calculate $\beta$ using \eqref{eq:beta_2}. The result is thus $\beta = \omega t$, meaning $\beta$ is changing with time. This is because, while the vehicle is moving in a circular pattern as a result of its changing velocity, the heading of the vehicle is not. How the vehicle is able to move in all directions without turning like some sort of kolibri, is unknown to us. Specifications of the vehicle on that front have not been provided. 
 
 \begin{figure}[!htb]
 	\centering
@@ -147,8 +148,8 @@ which returns the velocity of the current, relative to NED and given in NED. $\m
 Relative velocities are given by
 
 \begin{equation}
-    \boldsymbol{v}_r = \boldsymbol{v}_{b/c} = \boldsymbol{v}_{b/n} - \boldsymbol{v}_{c/n}
-    \label{eq_v_r}
+    \boldsymbol{v}_r = \boldsymbol{v}_{b/c} = \boldsymbol{v}_{b/n} + \boldsymbol{v}_{c/n}
+    \label{eq:v_r}
 \end{equation}
 
 However, we already made the assumption that the velocity of the body relative to the current $\mathbf{v}_{b/c}$, was the velocity provided us in \eqref{eq:velocity}. Calculations are therefore not needed to find it. Finding the velocity vector of the body relative to NED, however, will require adding the current velocity to the given body velocity
