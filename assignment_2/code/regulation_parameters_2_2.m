@@ -6,8 +6,8 @@ V_g = 637*3.6; % m/s
 delta_a_max = 25*rad2deg;
 e_phi_max = 15*rad2deg;
 zeta_phi = 0.707;
-a_phi_1 = 2.87; %2.87;
-a_phi_2 = 1; %-0.65;
+a_phi_1 = 36.67; %2.87;
+a_phi_2 = 211.35; %-0.65;
 
 omega_n_phi = sqrt(abs(a_phi_2)*delta_a_max /e_phi_max);
 
@@ -30,12 +30,12 @@ C = [0 0 0 1 0;
      0 1 0 0 0];
 D = [0 0 0 0]';
 
+s = tf('s');
 sys = ss(A,B,C,D);
 Phi = inv(s*eye(5)-A);
 trans = C*Phi*B + D;
 
 
-s = tf('s');
 plant = -0.65/(s - 2.)*(omega_n_phi)^2/(s^2 + 2*zeta_phi*omega_n_phi*s + omega_n_phi^2);
 
 H_el = (a_phi_2*(k_i_phi/s + k_p_phi))/((1+k_d_phi*(a_phi_2/(s+a_phi_1)))*(s+a_phi_1)*s+a_phi_2*(k_i_phi/s+k_p_phi));
@@ -48,9 +48,7 @@ H_evan = 1 + k_i_phi*(a_phi_2/(s*(s^2+(a_phi_1 + a_phi_2*k_d_phi)*s + a_phi_2*k_
 
 H_evCar = s*(s^2+(a_phi_1 + a_phi_2*k_d_phi)*s + a_phi_2*k_p_phi);
 
-%controlSystemDesigner('rlocus',H_evCar);
+controlSystemDesigner('rlocus',H_evCar);
 
-syms beta r 
 
-eqn1 = A_11*
 
