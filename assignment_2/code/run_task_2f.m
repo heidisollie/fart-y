@@ -11,7 +11,7 @@ d = 8*deg2rad;
 i = 1;
 Legend = {};
 for chi_c = [-5, 10, 15]*deg2rad
-    model = 'lateral_autopilot.slx';
+    model = 'lateral_autopilot_full.slx';
     load_system(model);
     simOut = sim(model);
     figure(1);
