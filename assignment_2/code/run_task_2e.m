@@ -3,8 +3,6 @@ clear all;
 clc;
 
 parameters_longitudal_autopilot; % get parameters
-%change !!!!!
-chi_c  = 10*deg2rad;
 d = 0*deg2rad;
 t_end = 100;
 
