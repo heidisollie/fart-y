@@ -8,12 +8,13 @@ Tl = 1/10;
 delta_a_max = 25*deg2rad;
 e_phi_max = 15*deg2rad;
 zeta_phi = 0.707;
-a_phi_1 = 2.87; 
-a_phi_2 = -0.65; 
+
+a_phi_1 = 2.87;
+a_phi_2 = -0.65;
 
 omega_n_phi = sqrt(abs(a_phi_2)*delta_a_max /e_phi_max);
+k_p_phi = sgn(a_phi_2)*delta_a_max /e_phi_max; %both a is positive
 
-k_p_phi = delta_a_max /e_phi_max*sign(a_phi_2);
 k_d_phi = (2*zeta_phi*omega_n_phi - a_phi_1) / a_phi_2;
 k_i_phi = -1; %temp
 
